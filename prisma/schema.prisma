@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Permission {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String @unique
+  value       String
+  description String
+  roles       PermissionOnRole[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Role {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String @unique
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  permissions PermissionOnRole[]
+  users       UserOnRole[]
+}
+
+model PermissionOnRole {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  permission  Permission @relation(fields: [permissionId], references: [id])
+  permissionId String    @db.ObjectId
+  role        Role       @relation(fields: [roleId], references: [id])
+  roleId      String     @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+}
+
+model User {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullName    String
+  email       String @unique
+  password    String
+  phoneNumber String
+  orders      Order[]
+  images       Image[]
+  roles       UserOnRole[]
+  refreshTokens RefreshToken[]
+  reviews     Review[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model UserOnRole {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String  @db.ObjectId
+  role        Role    @relation(fields: [roleId], references: [id])
+  roleId      String  @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RefreshToken {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  token       String
+  userId      String  @db.ObjectId
+  user        User    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Product {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String @unique
+  slug        String
+  description String
+  shortDescription String
+  sku         String
+  salePrice   Float
+  price       Float
+  isSale      Boolean
+  quantity    Int
+  attributes  Json
+  images      Image[]
+  orders      OrderOnProduct[]
+  reviews     Review[]
+  variants    ProductVariant[]
+  stockHistories StockHistory[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Image {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  url         String
+  dynamicId   String?  @db.ObjectId
+  product     Product? @relation(fields: [dynamicId], references: [id])
+  user        User?    @relation(fields: [dynamicId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String  @db.ObjectId
+  products    OrderOnProduct[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model OrderOnProduct{
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  order       Order   @relation(fields: [orderId], references: [id])
+  orderId     String  @db.ObjectId
+  product     Product @relation(fields: [productId], references: [id])
+  productId   String  @db.ObjectId
+  quantity    Int
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Review {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String  @db.ObjectId
+  product     Product @relation(fields: [productId], references: [id])
+  productId   String  @db.ObjectId
+  rating      Int
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ProductVariant {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String @db.ObjectId
+  product     Product @relation(fields: [productId], references: [id])
+  attributes  Json
+  price       Float
+  sku         String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model StockHistory {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String @db.ObjectId
+  product     Product @relation(fields: [productId], references: [id])
+  change      Int
+  createdAt   DateTime @default(now())
+}

@@ -56,3 +56,31 @@ export async function POST(req: Request) {
         return InternalServerErrorResponse(error);
     }
 }
+
+export async function PUT(req: Request) {
+    try {
+        const { users } = await req.json();
+
+        const response = await prisma.user.updateMany({
+            data: users
+        });
+
+        return SuccessResponse(response);
+
+    } catch (error) {
+        return InternalServerErrorResponse(error);
+    }
+}
+
+export async function DELETE(req: Request) {
+    try {
+        const { users } = await req.json();
+
+        const response = await prisma.user.deleteMany(users)
+
+        return SuccessResponse(response);
+
+    } catch (error) {
+        return InternalServerErrorResponse(error);
+    }
+}

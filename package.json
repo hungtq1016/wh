@@ -21,18 +21,21 @@
     "@mui/material-nextjs": "^5.15.11",
     "@mui/x-data-grid": "^7.6.1",
     "@prisma/client": "^5.14.0",
+    "@tinymce/tinymce-react": "^5.0.1",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "crypto": "^1.0.1",
     "next": "^14.2.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.8",
     "eslint": "^8",
     "eslint-config-next": "^14.2.3",
     "postcss": "^8",

@@ -11,6 +11,7 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import { toBase64Async } from '@/services/utils/file.util';
 import axios from 'axios';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
+import { v4 } from 'uuid';
 
 const categories = [
     {
@@ -24,6 +25,7 @@ const categories = [
 ]
 
 interface IImage{
+    id: string
     url: string 
     alt: string
 }
@@ -37,6 +39,7 @@ export default function ImageModal(props: { className?: string, handleUpdate?:an
         const files = e.target.files;
         if (files) {
             const newImages: IImage[] = await Promise.all(Array.from(files).map(async file => ({
+                id: v4(),
                 url: await toBase64Async(file),
                 alt: file.name
             })));
@@ -53,9 +56,9 @@ export default function ImageModal(props: { className?: string, handleUpdate?:an
         setLoading(true)
         axios.post('/api/v1/images',images)
             .then(res => {
-                if (res.status === 200) {
+                if (res.status === 201) {
                     if (props.handleUpdate) {
-                        props.handleUpdate(res.data)
+                        props.handleUpdate(res.data.data)
                     }
                 }
             })

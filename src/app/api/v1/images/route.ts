@@ -22,12 +22,12 @@ export async function POST(req: Request) {
     try {
         const images  = await req.json();
 
-        const newImages = await prisma.image.createMany({
+        const response = await prisma.image.createMany({
             data: images,
             skipDuplicates: true
         });
 
-        return CreatedResponse(newImages);
+        return CreatedResponse(images);
 
     } catch (error) {
         console.log(error)

@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
+import { convertBigIntToString } from '../utils/string.util';
 
 export default function ResponseHelper() {
 
     const SuccessResponse = async (data: any, message: string = 'Success') => {
+        const responseData = convertBigIntToString(data);
+        
         return await NextResponse.json({
-            data,
+            data: responseData,
             message,
             isError: false,
             status: 200,
@@ -14,8 +17,10 @@ export default function ResponseHelper() {
     }
 
     const CreatedResponse = async (data: any, message: string = 'Created') => {
+        const responseData = convertBigIntToString(data);
+
         return await Response.json({
-            data,
+            data: responseData,
             message,
             isError: false,
             status: 201,

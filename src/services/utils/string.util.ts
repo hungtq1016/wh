@@ -4,7 +4,7 @@ export const Base64UrlEncode = (value: string) => {
 
 export const isFieldValid = (field: string) => {
     // Check if the field is not undefined, null, or empty 
-    return field !== undefined && field !== null && field !== '' && field.trim().length > 0;
+    return field !== undefined && field !== null && field !== '' ;
 }
 
 export const pushFieldToFields = (fields: { [key: string]: string }) => {
@@ -20,3 +20,26 @@ export const pushFieldToFields = (fields: { [key: string]: string }) => {
 
     return array;
 }
+
+export const slugify = (value: string) => {
+    return value
+        .toLowerCase() 
+        .trim() 
+        .replace(/[^a-z0-9 -]/g, '') 
+        .replace(/\s+/g, '-') 
+        .replace(/-+/g, '-'); 
+}
+
+export const convertBigIntToString = (obj: any): any => {
+    if (typeof obj === 'bigint') {
+        return obj.toString();
+    } else if (Array.isArray(obj)) {
+        return obj.map(item => convertBigIntToString(item));
+    } else if (obj !== null && typeof obj === 'object') {
+        return Object.fromEntries(
+            Object.entries(obj).map(([key, value]) => [key, convertBigIntToString(value)])
+        );
+    } else {
+        return obj;
+    }
+};

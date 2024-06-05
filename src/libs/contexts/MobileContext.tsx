@@ -1,5 +1,5 @@
 //create mobile context and provider main func is when system on mobile toggle aside menu
-
+'use client'
 import React, { createContext, useContext, useState } from 'react';
 
 interface MobileContextProps {
@@ -15,17 +15,17 @@ const init_state = {
 const MobileContext = React.createContext<MobileContextProps>(init_state);
 
 export const MobileProvider = ({ children }:{children:React.ReactNode}) => {
-    // const [isMobile, setIsMobile] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
-    // const toggleMobile = () => {
-    //     setIsMobile(!isMobile);
-    // };
+    const toggleMobile = () => {
+        setIsMobile(!isMobile);
+    };
 
-    // return (
-    //     <MobileContext.Provider value={{ isMobile, toggleMobile }}>
-    //         {children}
-    //     </MobileContext.Provider>
-    // );
+    return (
+        <MobileContext.Provider value={{ isMobile, toggleMobile }}>
+            {children}
+        </MobileContext.Provider>
+    );
 };
 
 export const useMobile = () => {
@@ -35,4 +35,3 @@ export const useMobile = () => {
   }
   return context;
 };
-

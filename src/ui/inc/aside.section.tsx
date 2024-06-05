@@ -1,7 +1,7 @@
 'use client'
+import { useMobile } from '@/libs/contexts/MobileContext'
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import { CalendarIcon, ChartPieIcon, Cog6ToothIcon, DocumentDuplicateIcon, FolderIcon, HomeIcon, UsersIcon, XMarkIcon, } from '@heroicons/react/24/outline'
-import { useState } from 'react'
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -22,12 +22,13 @@ function classNames(...classes: string[]) {
 }
 
 export default function AsideSection() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const {isMobile, toggleMobile} = useMobile()
 
   return (
     <>
-      <Transition show={sidebarOpen}>
-          <Dialog className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+      <Transition show={isMobile}>
+          <Dialog className="relative z-50 lg:hidden" onClose={toggleMobile}>
             <TransitionChild
               enter="transition-opacity ease-linear duration-300"
               enterFrom="opacity-0"
@@ -58,7 +59,7 @@ export default function AsideSection() {
                     leaveTo="opacity-0"
                   >
                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                      <button type="button" className="-m-2.5 p-2.5" onClick={toggleMobile}>
                         <span className="sr-only">Close sidebar</span>
                         <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                       </button>

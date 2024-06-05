@@ -25,4 +25,4 @@ export default function Heading({children, ...props}:{children: React.ReactNode,
 }
 
 Heading.Title = ({children,...props}:{children: React.ReactNode, className?:string}) => <H1 className={props.className} >{children}</H1>
-Heading.Desc = ({children,...props}:{children: React.ReactNode, className?:string}) => <P className={props.className} >{children}</P>
+Heading.Desc = ({children,...props}:{children: React.ReactNode, className?:string}) => <P className={`!text-gray-600 !font-medium text-sm ${props.className}`} >{children}</P>

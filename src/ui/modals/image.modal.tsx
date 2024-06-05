@@ -10,6 +10,7 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { toBase64Async } from '@/services/utils/file.util';
 import axios from 'axios';
+import { ArrowPathIcon } from '@heroicons/react/20/solid';
 
 const categories = [
     {
@@ -27,8 +28,9 @@ interface IImage{
     alt: string
 }
 
-export default function ImageModal(props: { className?: string }) {
+export default function ImageModal(props: { className?: string, handleUpdate?:any}) {
     let [isOpen, setIsOpen] = useState(false)
+    const [ loading, setLoading ] = useState(false)
     const [images, setImages] = useState([] as IImage[])
    
     const onImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,9 +50,14 @@ export default function ImageModal(props: { className?: string }) {
     }
 
     const onUpload = () => {
+        setLoading(true)
         axios.post('/api/v1/images',images)
             .then(res => {
-                console.log(res.data)
+                if (res.status === 200) {
+                    if (props.handleUpdate) {
+                        props.handleUpdate(res.data)
+                    }
+                }
             })
             .catch(error => {
                 console.error(error)
@@ -58,6 +65,7 @@ export default function ImageModal(props: { className?: string }) {
             .finally(() => {
                 setIsOpen(false)
                 setImages([])
+                setLoading(false)
             })
     }
 
@@ -129,6 +137,7 @@ export default function ImageModal(props: { className?: string }) {
                 onClick={() => setIsOpen(true)}
                 component="label"
                 role={undefined}
+                color="inherit"
                 variant="outlined"
                 tabIndex={-1}
                 startIcon={<CloudUploadIcon />}
@@ -218,6 +227,14 @@ export default function ImageModal(props: { className?: string }) {
                     </div>
                 </Dialog>
             </Transition>
+            {
+                loading && (<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="flex items-center justify-center p-4 bg-white rounded-xl">
+                        <ArrowPathIcon className="size-20 animate-spin text-blue-600" />
+                    </div>
+                </div>)
+            }
         </div>
+        
     )
 }

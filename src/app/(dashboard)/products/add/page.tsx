@@ -6,7 +6,7 @@ export default function AddProductPage(){
         <div>
             <Heading>
                 <Heading.Title className="mb-1">Create Product</Heading.Title>
-                <Heading.Desc>Add new</Heading.Desc>
+                <Heading.Desc>Add new product</Heading.Desc>
             </Heading>
             <ProductFrom />
         </div>

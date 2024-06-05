@@ -27,7 +27,7 @@ interface IImage{
     alt: string
 }
 
-export default function ImageModal() {
+export default function ImageModal(props: { className?: string }) {
     let [isOpen, setIsOpen] = useState(false)
     const [images, setImages] = useState([] as IImage[])
    
@@ -120,11 +120,11 @@ export default function ImageModal() {
     )
 
     return (
-        <>
+        <div className={props.className}>
             <InputLabel
                 size='normal'
                 htmlFor="upload-image"
-                className='mb-2'>Upload image</InputLabel>
+            >Upload image</InputLabel>
             <Button
                 onClick={() => setIsOpen(true)}
                 component="label"
@@ -218,6 +218,6 @@ export default function ImageModal() {
                     </div>
                 </Dialog>
             </Transition>
-        </>
+        </div>
     )
 }

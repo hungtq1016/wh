@@ -21,15 +21,13 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const images  = await req.json();
-        console.log(images)
+
         const newImages = await prisma.image.createMany({
             data: images,
             skipDuplicates: true
         });
 
-        console.log(newImages)
-
-        return CreatedResponse(images);
+        return CreatedResponse(newImages);
 
     } catch (error) {
         console.log(error)

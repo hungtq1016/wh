@@ -28,25 +28,22 @@ interface AsideContextProps {
 }
 
 const init_state = {
-  asideState: {
-    isMobile: false,
-    navigation: []
-  },
-  asideDispatch: () => null
+  isMobile: false,
+  navigation: []
 };
 
-const AsideContext = React.createContext<AsideContextProps>(init_state);
+const AsideContext = React.createContext<AsideContextProps>({
+  asideState: init_state,
+  asideDispatch: () => {},
+});
 
 export const MobileProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [navigation, setNavigation] = useState<INavigation[]>([]);
-
-  const toggleMobile = () => {
-    setIsMobile(!isMobile);
-  };
+  
+  const [asideState, asideDispatch] = useState<AsideState>(init_state);
+  
 
   return (
-    <AsideContext.Provider value={{ isMobile, navigation, toggleMobile, setNavigation }}>
+    <AsideContext.Provider value={{  }}>
       {children}
     </AsideContext.Provider>
   );

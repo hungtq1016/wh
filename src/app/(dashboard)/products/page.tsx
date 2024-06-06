@@ -3,7 +3,7 @@ import DataTable from "./table";
 import Heading from "@/ui/inc/heading.section";
 
 export default async function ProductsPage(){
-    const response = await fetch('http://localhost:3000/api/v1/products', { cache: 'no-store' })
+    const response = await fetch('http://localhost:3000/api/v1/products', { next: { revalidate: 10 } })
     const data = await response.json()
     const rows = data.data    
     return (

@@ -1,12 +1,14 @@
 'use client'
 import { useMobile } from '@/libs/contexts/MobileContext'
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
-import { CalendarIcon, ChartPieIcon, Cog6ToothIcon, DocumentDuplicateIcon, FolderIcon, HomeIcon, UsersIcon, XMarkIcon, } from '@heroicons/react/24/outline'
+import { CalendarIcon, ChartPieIcon, Cog6ToothIcon, DocumentDuplicateIcon, FolderIcon, FolderPlusIcon, PencilSquareIcon, TableCellsIcon, UsersIcon, XMarkIcon, } from '@heroicons/react/24/outline'
+import { TableCell } from '@mui/material'
+import { usePathname } from 'next/navigation'
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+  { name: 'Dashboard', href: '#', icon: TableCellsIcon, current: true },
+  { name: 'Team', href: '#', icon: FolderPlusIcon, current: false },
+  { name: 'Projects', href: '#', icon: PencilSquareIcon, current: false },
   { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
   { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
   { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
@@ -24,7 +26,8 @@ function classNames(...classes: string[]) {
 export default function AsideSection() {
 
   const {isMobile, toggleMobile} = useMobile()
-
+  const pathname = usePathname()
+  const route = pathname.split('/')[1]
   return (
     <>
       <Transition show={isMobile}>

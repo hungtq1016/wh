@@ -5,6 +5,8 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { TextField } from '@mui/material';
 import { Dropdown, MenuItem, MenuButton, Menu } from '@mui/base';
 import axios from 'axios';
+import { urlBuilder } from '@/services/utils/url.util';
+import Image from 'next/image';
 
 const getData = async (route: string) => {
   const response = await axios.get(route)
@@ -12,11 +14,11 @@ const getData = async (route: string) => {
   return response.data.data || []
 }
 
-export default function DataTable() {
+export default function DataTable({query}:{query?: string[]}) {
 
   const [rows, setRows] = React.useState<any[]>([]);
   React.useEffect(() => {
-    getData("/api/v1/images").then((data) => {
+    getData(urlBuilder("/api/v1/images",query)).then((data) => {
       setRows(data)
     })
   }, [])
@@ -26,7 +28,17 @@ export default function DataTable() {
     {
       field: 'url',
       headerName: 'Url',
-      width: 300,
+      width: 200,
+      renderCell: ({ row }) => {
+        return (
+          <Image
+            src={row.url}
+            alt={row.alt}
+            width={100}
+            height={100}
+          />
+        )
+      }
     },
     {
       field: 'alt',

@@ -3,7 +3,7 @@ import "./globals.css";
 
 import AsideSection from "@/ui/inc/aside.section";
 import HeaderSection from "@/ui/inc/header.section";
-import { MobileProvider } from "@/libs/contexts/MobileContext";
+import { MobileProvider } from "@/libs/contexts/AsideContext";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 
 export default function RootLayout({ children }: { children: Readonly<React.ReactNode> }) {

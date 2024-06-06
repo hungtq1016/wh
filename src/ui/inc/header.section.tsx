@@ -3,7 +3,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems, Transition, } from '@headlessui/react'
 import { Bars3Icon, BellIcon, } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { useMobile } from '@/libs/contexts/MobileContext'
+import { useAside } from '@/libs/contexts/AsideContext'
 
 const userNavigation = [
     { name: 'Your profile', href: '#' },
@@ -22,7 +22,7 @@ const navigation = [
 
 export default function HeaderSection() {
 
-  const {toggleMobile} = useMobile()
+  const {toggleMobile} = useAside()
 
     return (
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">

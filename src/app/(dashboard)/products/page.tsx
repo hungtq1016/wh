@@ -10,7 +10,7 @@ export default function ProductsPage(){
                 <Heading.Title className="mb-1">Products</Heading.Title>
                 <Heading.Desc>Manage your products</Heading.Desc>
             </Heading>
-            <DataTable route="/api/v1/products"/>
+            <DataTable/>
         </div>
     )
 }

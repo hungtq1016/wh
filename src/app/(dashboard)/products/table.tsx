@@ -11,14 +11,14 @@ const getData = async (route: string) => {
   return response.data.data
 }
 
-export default function DataTable({route}:{route:string}) {
+export default function DataTable() {
 
   const [rows, setRows] = React.useState<any[]>([]);
   React.useEffect(() => {
-    getData(route).then((data) => {
+    getData("/api/v1/products").then((data) => {
       setRows(data)
     })
-  }, [route])
+  }, [])
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -85,7 +85,7 @@ export default function DataTable({route}:{route:string}) {
           <Dropdown className="relative inline-block text-left">
             <MenuButton 
             
-            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >Action</MenuButton>
             <Menu className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
               <MenuItem 

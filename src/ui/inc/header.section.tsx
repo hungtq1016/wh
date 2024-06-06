@@ -5,6 +5,7 @@ import { Bars3Icon, BellIcon, } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { AsideContext } from '@/libs/contexts/AsideContext'
 import { useContext } from 'react'
+import Link from 'next/link'
 
 const userNavigation = [
     { name: 'Your profile', href: '#' },
@@ -15,8 +16,8 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
+  { name: 'Products', href: '/products' },
+  { name: 'Images', href: '/images' },
   { name: 'Marketplace', href: '#' },
   { name: 'Company', href: '#' },
 ]
@@ -38,9 +39,9 @@ export default function HeaderSection() {
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
             <div className="hidden lg:flex lg:gap-x-12 lg:flex-1 items-center">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
+              <Link key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
                 {item.name}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -81,7 +82,7 @@ export default function HeaderSection() {
                       {userNavigation.map((item) => (
                         <MenuItem key={item.name}>
                           {({ focus }) => (
-                            <a
+                            <Link
                               href={item.href}
                               className={classNames(
                                 focus ? 'bg-gray-50' : '',
@@ -89,7 +90,7 @@ export default function HeaderSection() {
                               )}
                             >
                               {item.name}
-                            </a>
+                            </Link>
                           )}
                         </MenuItem>
                       ))}

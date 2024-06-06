@@ -3,12 +3,12 @@ import { Dialog, DialogPanel, Tab, TabGroup, TabList, TabPanel, TabPanels, Trans
 import { useState } from 'react'
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { InputLabel } from '@mui/material';
+import { InputLabel, TextField } from '@mui/material';
 import { Laptop, Public } from '@mui/icons-material';
 import Image from 'next/image';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { TrashIcon } from '@heroicons/react/24/solid';
-import { toBase64Async } from '@/services/utils/file.util';
+import { toBase64Async, toBase64Image } from '@/services/utils/file.util';
 import axios from 'axios';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
 import { v4 } from 'uuid';
@@ -24,17 +24,17 @@ const categories = [
     }
 ]
 
-interface IImage{
+interface IImage {
     id: string
-    url: string 
+    url: string
     alt: string
 }
 
-export default function ImageModal(props: { className?: string, handleUpdate?:any}) {
+export default function ImageModal(props: { className?: string, handleUpdate?: any }) {
     let [isOpen, setIsOpen] = useState(false)
-    const [ loading, setLoading ] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [images, setImages] = useState([] as IImage[])
-   
+
     const onImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files) {
@@ -47,14 +47,14 @@ export default function ImageModal(props: { className?: string, handleUpdate?:an
         }
     };
 
-    const removeImage = (index:number) => {
+    const removeImage = (index: number) => {
         const newImages: IImage[] = images.filter((image, i: number) => i !== index)
         setImages(newImages)
     }
 
     const onUpload = () => {
         setLoading(true)
-        axios.post('/api/v1/images',images)
+        axios.post('/api/v1/images', images)
             .then(res => {
                 if (res.status === 201) {
                     if (props.handleUpdate) {
@@ -72,8 +72,26 @@ export default function ImageModal(props: { className?: string, handleUpdate?:an
             })
     }
 
-    const ImagePreview = ({images}:{images:IImage[]}) => {
-        return(
+    const [uri, setUri] = useState('')
+
+    const onUrlUpload = () => {
+        toBase64Image(uri)
+            .then((base64) => {
+                if (base64) {
+                    setImages(prevImages => [...prevImages, {
+                        id: v4(),
+                        url: base64,
+                        alt: 'image'
+                    }])
+                }
+            })
+            .finally(() => {
+                setUri('')
+            })
+    }
+
+    const ImagePreview = ({ images }: { images: IImage[] }) => {
+        return (
             <div className="flex gap-2 p-4 flex-wrap">
                 {
                     images.map((image, index) => (
@@ -177,30 +195,32 @@ export default function ImageModal(props: { className?: string, handleUpdate?:an
                                                 </TabList>
                                                 <TabPanels className="p-3 max-w-xl">
                                                     <TabPanel className="rounded-xl bg-black/5 min-h-72">
-                                                    {
-                                                        images.length === 0 ?
-                                                        <Upload />
-                                                        :
-                                                        <ImagePreview images={images}/>
+                                                        {
+                                                            images.length === 0 ?
+                                                                <Upload />
+                                                                :
+                                                                <ImagePreview images={images} />
 
-                                                    }
+                                                        }
                                                     </TabPanel>
-                                                    
+
                                                     <TabPanel className="rounded-xl bg-black/5">
-
-                                                        <div className="flex items-center justify-center w-full">
-                                                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                                    <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                                    </svg>
-                                                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                                                    <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                                                                </div>
-                                                                <input id="dropzone-file" type="file" className="hidden" />
-                                                            </label>
-                                                        </div>
-
+                                                        <>
+                                                            <div className='flex gap-2 p-2'>
+                                                                <TextField
+                                                                    type="text"
+                                                                    value={uri}
+                                                                    onChange={(e) => setUri(e.target.value)}
+                                                                    label="Image URL"
+                                                                    className='w-full bg-white'
+                                                                    size='small'    
+                                                                />
+                                                                <Button type='button' onClick={onUrlUpload}>
+                                                                    Search
+                                                                </Button>
+                                                            </div>
+                                                            <ImagePreview images={images} />
+                                                        </>
                                                     </TabPanel>
                                                 </TabPanels>
                                                 <div className="border-t">
@@ -238,6 +258,6 @@ export default function ImageModal(props: { className?: string, handleUpdate?:an
                 </div>)
             }
         </div>
-        
+
     )
 }

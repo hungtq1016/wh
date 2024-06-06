@@ -12,6 +12,7 @@ export default function ImagesLayout({ children }: { children: React.ReactNode }
             name: 'Images',
             href: '/images',
             icon: TableCellsIcon,
+            value: 'view',
             current: true
         }
         
@@ -22,13 +23,13 @@ export default function ImagesLayout({ children }: { children: React.ReactNode }
             type: 'SET_NAVIGATION',
             payload: navigationData
         });
-
+    
         asideDispatch({
             type: 'UPDATE_ACTIVE',
             payload: pathname
         });
         
-    }, [asideDispatch, navigationData]);
+    }, [asideDispatch, navigationData, pathname]);
 
     return (
         <>

@@ -85,8 +85,10 @@ export default function ResponseHelper() {
     }
 
     const InternalServerErrorResponse = async (data: any, message: string = 'Internal Server Error') => {
+        const responseData = convertBigIntToString(data);
+
         return await Response.json({
-            data,
+            data: responseData,
             message,
             isError: true,
             status: 500,

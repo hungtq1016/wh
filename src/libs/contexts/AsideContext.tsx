@@ -4,6 +4,7 @@ import React, { ForwardRefExoticComponent, RefAttributes, SVGProps, createContex
 
 interface INavigation {
   name: string;
+  value: string;
   href: string;
   icon: ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref"> & {
     title?: string | undefined;

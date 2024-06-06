@@ -12,17 +12,20 @@ export default function ProductsLayout({ children }: { children: React.ReactNode
             name: 'Products',
             href: '/products',
             icon: TableCellsIcon,
+            value: 'view',
             current: true
         },
         {
             name: 'Add Product',
             href: '/products/add',
             icon: FolderPlusIcon,
+            value: 'add',
             current: false
         },
         {
             name: 'Edit Product',
             href: '?',
+            value: 'edit',
             icon: PencilSquareIcon,
             current: false
         }

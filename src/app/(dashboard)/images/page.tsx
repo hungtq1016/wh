@@ -1,6 +1,8 @@
 
+import P from "@/ui/base/p";
 import DataTable from "./table";
 import Heading from "@/ui/inc/heading.section";
+import H1 from "@/ui/base/h1";
 
 export default function ImagesPage(){
 
@@ -8,24 +10,20 @@ export default function ImagesPage(){
         <div className="flex flex-col gap-32">
             <div>
                 <Heading>
-                    <Heading.Title className="mb-1">Images Dont Use</Heading.Title>
+                    <Heading.Title className="mb-1">Images</Heading.Title>
                     <Heading.Desc>Manage your images </Heading.Desc>
                 </Heading>
-                <DataTable query={["allnull"]}/>
+                <H1>Images by users</H1>
+                <DataTable query={["user"]} route="users"/>
             </div>
             <div>
-                <Heading>
-                    <Heading.Title className="mb-1">Product Image</Heading.Title>
-                    <Heading.Desc>Manage your images </Heading.Desc>
-                </Heading>
-                <DataTable query={["product"]}/>
+                <H1>Images base on products</H1>
+                <DataTable query={["product"]} route="products"/>
             </div>
             <div>
-                <Heading>
-                    <Heading.Title className="mb-1">User Image</Heading.Title>
-                    <Heading.Desc>Manage your images </Heading.Desc>
-                </Heading>
-                <DataTable query={["user"]}/>
+                
+                <H1>Images don&apos;t use</H1>
+                <DataTable query={["allnull"]} />
             </div>
         </div>
     )

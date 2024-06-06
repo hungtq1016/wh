@@ -4,7 +4,7 @@ import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/re
 import { XMarkIcon, } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams, useParams } from 'next/navigation'
 import { useContext } from 'react'
 
 function classNames(...classes: string[]) {
@@ -15,6 +15,22 @@ export default function AsideSection() {
 
   const { asideState, asideDispatch } = useContext(AsideContext)
   const pathname = usePathname();
+
+  const {id} = useParams();
+
+  asideState.navigation.map((item) => {
+    item.current = false;
+    if(item.href === pathname){
+      item.current = true;
+    }
+  })
+
+  if (id) {
+    const data = asideState.navigation.find((item) => item.value === 'edit')
+    if (data) {
+      data.current = true;
+    }
+  }
 
   return asideState.navigation.length !== 0 && (
     <>
@@ -73,7 +89,6 @@ export default function AsideSection() {
                         <ul role="list" className="-mx-2 space-y-1">
                           {asideState.navigation.map((item) => (
                             <li key={item.name}>
-                              {item.current = item.href === pathname ? true : false}
                               <Link
                                 href={item.href}
                                 className={classNames(
@@ -124,7 +139,7 @@ export default function AsideSection() {
                 <ul role="list" className="flex flex-col gap-y-1">
                   {asideState.navigation.map((item) => (
                     <li key={item.name}>
-                      {item.current = item.href === pathname ? true : false}
+      
                       <Link
                         href={item.href}
                         className={classNames(

@@ -5,6 +5,7 @@ import P from "../base/p";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default function Heading({children, ...props}:{children: React.ReactNode, className?:string, href?:string}){
+    
     return(
         <div className={`flex justify-between items-center border-b pb-2 ${props.className}`}>
             <div>

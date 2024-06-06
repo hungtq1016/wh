@@ -1,26 +1,32 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/libs/db";
 import ResponseHelper from "@/services/helpers/response.helper";
-import * as bcrypt from 'bcrypt';
 
 const { SuccessResponse, InternalServerErrorResponse, BadRequestResponse, NotFoundResponse } = ResponseHelper();
 
 export async function GET(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
-        let user = null;
-        switch(type){
+        const [type, data, ...value] = params.value;
+        let product = null;
+        switch (type) {
             case 'id':
-                user = await prisma.user.findUnique({
+                product = await prisma.product.findUnique({
                     where: {
                         id: data
                     }
                 });
                 break;
-            case 'email':
-                user = await prisma.user.findUnique({
+            case 'slug':
+                product = await prisma.product.findUnique({
                     where: {
-                        email: data
+                        slug: data
+                    }
+                });
+                break;
+            case 'sku':
+                product = await prisma.product.findUnique({
+                    where: {
+                        sku: data
                     }
                 });
                 break;
@@ -28,11 +34,11 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                 return BadRequestResponse(null, "Invalid type");
         }
 
-        if (!user) {
-            return NotFoundResponse(null, "User not found");
+        if (!product) {
+            return NotFoundResponse(null, "Product not found");
         }
 
-        return SuccessResponse(user);
+        return SuccessResponse(product);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -41,30 +47,27 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
 
 export async function PUT(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
-        const { fullName, phoneNumber } = await req.json();
-        let user = null;
-        switch(type){
+        const [type, data, ...value] = params.value;
+        const body = await req.json();
+        let product = null;
+        switch (type) {
             case 'id':
-                user = await prisma.user.update({
+                product = await prisma.product.update({
                     where: {
                         id: data
                     },
-                    data: {
-                        fullName,
-                        phoneNumber
-                    }
+                    data: body
                 });
                 break;
             default:
                 return BadRequestResponse(null, "Invalid ID");
         }
 
-        if (!user) {
-            return NotFoundResponse(null, "User not found");
+        if (!product) {
+            return NotFoundResponse(null, "Product not found");
         }
 
-        return SuccessResponse(user);
+        return SuccessResponse(product);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -73,11 +76,11 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
 
 export async function DELETE(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
-        let user = null;
-        switch(type){
+        const [type, data, ...value] = params.value;
+        let product = null;
+        switch (type) {
             case 'id':
-                user = await prisma.user.delete({
+                product = await prisma.product.delete({
                     where: {
                         id: data
                     }
@@ -87,13 +90,14 @@ export async function DELETE(req: NextRequest, { params }: { params: { value: st
                 return BadRequestResponse(null, "Invalid ID");
         }
 
-        if (!user) {
-            return NotFoundResponse(null, "User not found");
+        if (!product) {
+            return NotFoundResponse(null, "Product not found");
         }
 
-        return SuccessResponse(user);
+        return SuccessResponse(product);
 
     } catch (error) {
+
         return InternalServerErrorResponse(error);
     }
 }

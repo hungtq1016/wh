@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    //supported image formats
+    images: {
+        domains: ['tailwindui.com'],
+    },
+};
 
 export default nextConfig;

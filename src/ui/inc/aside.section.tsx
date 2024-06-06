@@ -1,7 +1,11 @@
 'use client'
-import { useAside } from '@/libs/contexts/AsideContext'
+import { AsideContext } from '@/libs/contexts/AsideContext'
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import { XMarkIcon, } from '@heroicons/react/24/outline'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useContext } from 'react'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -9,12 +13,14 @@ function classNames(...classes: string[]) {
 
 export default function AsideSection() {
 
-  const {isMobile, toggleMobile , navigation} = useAside()
-  
+  const { asideState, asideDispatch } = useContext(AsideContext)
+  const pathname = usePathname();
+	const isActive = (path:string) => path === pathname;
+
   return (
     <>
-      <Transition show={isMobile}>
-          <Dialog className="relative z-50 lg:hidden" onClose={toggleMobile}>
+      <Transition show={asideState.isMobile}>
+          <Dialog className="relative z-50 lg:hidden" onClose={(e)=>asideDispatch({type:'TOGGLE_MOBILE'})}>
             <TransitionChild
               enter="transition-opacity ease-linear duration-300"
               enterFrom="opacity-0"
@@ -45,7 +51,7 @@ export default function AsideSection() {
                     leaveTo="opacity-0"
                   >
                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={toggleMobile}>
+                      <button type="button" className="-m-2.5 p-2.5" onClick={()=>asideDispatch({type:'TOGGLE_MOBILE'})}>
                         <span className="sr-only">Close sidebar</span>
                         <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                       </button>
@@ -54,20 +60,23 @@ export default function AsideSection() {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
-                      <img
+                      <Image
+                        width={32}
+                        height={32}
                         className="h-8 w-auto"
                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
+                        alt="#"
                       />
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
                         <li>
                           <ul role="list" className="-mx-2 space-y-1">
-                            {navigation.map((item) => (
+                            {asideState.navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                {item.current = item.href === pathname ? true : false}
+                                <Link
+                                  href={item.href}                       
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 dark:bg-slate-900 text-indigo-600 dark:text-gray-50'
@@ -83,7 +92,7 @@ export default function AsideSection() {
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -102,19 +111,22 @@ export default function AsideSection() {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-2 pb-4">
             <div className="flex h-16 shrink-0 items-center">
-              <img
+              <Image
+                width={32}
+                height={32}
                 className="h-8 w-auto"
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                 alt="#"
               />
             </div>
-            <nav className="flex flex-1 flex-col">
+            <nav className="flex flex-1 flex-col" >
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="flex flex-col gap-y-1">
-                    {navigation.map((item) => (
+                    {asideState.navigation.map((item) => (
                       <li key={item.name}>
-                        <a
+                        {item.current = item.href === pathname ? true : false}
+                        <Link
                           href={item.href}
                           className={classNames(
                             item.current
@@ -131,7 +143,7 @@ export default function AsideSection() {
                             aria-hidden="true"
                           />
                         
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

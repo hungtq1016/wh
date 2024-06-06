@@ -3,7 +3,7 @@ import "./globals.css";
 
 import AsideSection from "@/ui/inc/aside.section";
 import HeaderSection from "@/ui/inc/header.section";
-import { MobileProvider } from "@/libs/contexts/AsideContext";
+import { AsideProvider } from "@/libs/contexts/AsideContext";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 
 export default function RootLayout({ children }: { children: Readonly<React.ReactNode> }) {
@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: Readonly<React.Reac
       <body>
         <div>
         <AppRouterCacheProvider>
-          <MobileProvider>
+          <AsideProvider>
             <AsideSection />
 
             <div className="lg:pl-14">
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: Readonly<React.Reac
                 <div className="px-4 sm:px-6 lg:px-8">{children}</div>
               </main>
             </div>
-          </MobileProvider>
+          </AsideProvider>
         </AppRouterCacheProvider>
         </div>
       </body>

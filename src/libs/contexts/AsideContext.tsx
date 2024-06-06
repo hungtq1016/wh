@@ -1,6 +1,6 @@
 //create mobile context and provider main func is when system on mobile toggle aside menu
 'use client'
-import React, { ForwardRefExoticComponent, RefAttributes, SVGProps, createContext, useContext, useState } from 'react';
+import React, { ForwardRefExoticComponent, RefAttributes, SVGProps, createContext, useContext, useReducer, useState } from 'react';
 
 interface INavigation {
   name: string;
@@ -18,7 +18,7 @@ interface AsideState {
 }
 
 interface AsideAction {
-  type: 'TOGGLE_MOBILE' | 'SET_NAVIGATION';
+  type: 'TOGGLE_MOBILE' | 'SET_NAVIGATION' | 'UPDATE_ACTIVE';
   payload?: any;
 }
 
@@ -32,27 +32,31 @@ const init_state = {
   navigation: []
 };
 
-const AsideContext = React.createContext<AsideContextProps>({
+export const AsideContext = React.createContext<AsideContextProps>({
   asideState: init_state,
   asideDispatch: () => {},
 });
 
-export const MobileProvider = ({ children }: { children: React.ReactNode }) => {
+const AsideReducer = (state: AsideState, action: AsideAction): AsideState => {
+  switch (action.type) {
+    case 'TOGGLE_MOBILE':
+      return { ...state, isMobile: !state.isMobile };
+    case 'SET_NAVIGATION':
+      return { ...state, navigation: action.payload };
+    case 'UPDATE_ACTIVE':
+      return { ...state, navigation: state.navigation.map((nav: INavigation) => ({ ...nav, current: nav.href === action.payload })) };
+    default:
+      return state;
+  }
+}
+
+export const AsideProvider = ({ children }: { children: React.ReactNode }) => {
   
-  const [asideState, asideDispatch] = useState<AsideState>(init_state);
-  
+  const [asideState, asideDispatch] = useReducer(AsideReducer, init_state);
 
   return (
-    <AsideContext.Provider value={{  }}>
+    <AsideContext.Provider value={{ asideState, asideDispatch }}>
       {children}
     </AsideContext.Provider>
   );
-};
-
-export const useAside = () => {
-  const context = useContext(AsideContext);
-  if (!context) {
-    throw new Error('useAside must be used within a MobileProvider');
-  }
-  return context;
 };

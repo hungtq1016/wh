@@ -6,7 +6,13 @@ const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFo
 
 export async function GET(req: Request) {
     try {
-        const products = await prisma.product.findMany();
+        const products = await prisma.product.findMany({
+            include: {
+                _count: {
+                    select: { images: true }
+                },
+            }
+        });
 
         if (!products) {
             return NotFoundResponse(null, "Products not found");

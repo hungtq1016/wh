@@ -81,10 +81,10 @@ model RefreshToken {
 model Product {
   id               String           @id @default(uuid())
   name             String           @unique
-  slug             String
+  slug             String           @unique
   description      String
   shortDescription String
-  sku              String
+  sku              String           @unique
   salePrice        BigInt
   price            BigInt
   isSale           Boolean
@@ -105,8 +105,8 @@ model Image {
   alt       String
   productId String?
   userId    String?
-  product   Product? @relation(fields: [productId], references: [id])
-  user      User?    @relation(fields: [userId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

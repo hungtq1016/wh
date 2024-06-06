@@ -1,7 +1,7 @@
 'use client'
 import * as React from 'react';
 import ImageModal from '@/ui/modals/image.modal';
-import { Button, Checkbox, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Checkbox, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Image from 'next/image';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { slugify } from '@/services/utils/string.util';
@@ -41,25 +41,25 @@ export default function ProductFrom() {
     shortDescription: '',
     sku: '',
     salePrice: 0,
-    price: 0,
+    price: 1000000,
     isSale: false,
-    quantity: 0,
+    quantity: 1,
     attributes: [
       {
         k: 'page-length',
-        v: '0'
+        v: 50
       },
       {
         k: 'width',
-        v: '0'
+        v: 13
       },
       {
         k: 'length',
-        v: '0'
+        v: 20
       },
       {
         k: 'breadth',
-        v: '0'
+        v: 2
       },
       {
         k: 'language',
@@ -125,6 +125,7 @@ export default function ProductFrom() {
               className='w-full'
               size='small'
               id="name"
+              required
               placeholder='Product Name'
               value={formState.name}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'name', value: e.target.value })}
@@ -147,6 +148,7 @@ export default function ProductFrom() {
               className='w-full'
               size='small'
               id="sku"
+              required
               placeholder='Product SKU'
               value={formState.sku}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'sku', value: e.target.value })}
@@ -187,9 +189,13 @@ export default function ProductFrom() {
             <InputLabel htmlFor="price">Price</InputLabel>
             <TextField
               className='w-full'
-
+              InputProps={{
+                endAdornment:<InputAdornment position="end">đ</InputAdornment>
+              }}
               size='small'
               id="price"
+              type='number'
+              required
               placeholder='Price of Product'
               value={formState.price}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'price', value: e.target.value })}
@@ -201,6 +207,11 @@ export default function ProductFrom() {
               className='w-full'
               size='small'
               id="sale"
+              type='number'
+              required
+              InputProps={{
+                endAdornment:<InputAdornment position="end">đ</InputAdornment>
+              }}
               placeholder='Price of Product on Sale'
               value={formState.salePrice}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'salePrice', value: e.target.value })}
@@ -211,7 +222,12 @@ export default function ProductFrom() {
             <TextField
               className='w-full'
               size='small'
+              type='number'
               id="quantity"
+              required
+              InputProps={{
+                endAdornment:<InputAdornment position="end">item{formState.quantity>1 && <span>s</span>}</InputAdornment>
+              }}
               placeholder='Quantity of Product in Stock'
               value={formState.quantity}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'quantity', value: e.target.value })}
@@ -233,6 +249,10 @@ export default function ProductFrom() {
             <TextField
               className='w-full'
               size='small'
+              required
+              InputProps={{
+                endAdornment:<InputAdornment position="end">pages</InputAdornment>
+              }}
               id="page-length"
               type='number'
               placeholder='Page Length of Product'
@@ -246,7 +266,11 @@ export default function ProductFrom() {
               className='w-full'
               size='small'
               id="width"
+              required
               type='number'
+              InputProps={{
+                endAdornment:<InputAdornment position="end">cm</InputAdornment>
+              }}
               placeholder='Width of Product'
               value={formState.attributes.find((attr: any) => attr.k === 'width')?.v || ''}
               onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'width', value: e.target.value })}
@@ -257,8 +281,12 @@ export default function ProductFrom() {
             <TextField
               className='w-full'
               size='small'
+              required
               id="length"
               type='number'
+              InputProps={{
+                endAdornment:<InputAdornment position="end">cm</InputAdornment>
+              }}
               placeholder='Length of Product'
               value={formState.attributes.find((attr: any) => attr.k === 'length')?.v || ''}
               onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'length', value: e.target.value })}
@@ -269,8 +297,12 @@ export default function ProductFrom() {
             <TextField
               className='w-full'
               size='small'
+              required
               id="breadth"
               type='number'
+              InputProps={{
+                endAdornment:<InputAdornment position="end">cm</InputAdornment>
+              }}
               placeholder='Breadth of Product'
               value={formState.attributes.find((attr: any) => attr.k === 'breadth')?.v || ''}
               onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'breadth', value: e.target.value })}
@@ -314,6 +346,7 @@ export default function ProductFrom() {
             <TextareaAutosize
               className='w-full border border-gray-300 rounded p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-900'
               minRows={16}
+              required
               id="description"
               placeholder='Product Description'
               value={formState.description}

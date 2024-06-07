@@ -16,6 +16,13 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                     }
                 });
                 break;
+            case 'productId':
+                image = await prisma.image.findFirst({
+                    where: {
+                        productId: data
+                    }
+                });
+                break;
             default:
                 return BadRequestResponse(null, "Invalid type");
         }

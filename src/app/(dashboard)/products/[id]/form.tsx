@@ -36,7 +36,7 @@ const initialState = {
       v: 20
     },
     {
-      k: 'breadth',
+      k: 'height',
       v: 2
     },
     {
@@ -310,19 +310,19 @@ export default function ProductFrom() {
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="breadth">Breadth</InputLabel>
+            <InputLabel htmlFor="height">Height</InputLabel>
             <TextField
               className='w-full'
               size='small'
               required
-              id="breadth"
+              id="height"
               type='number'
               InputProps={{
                 endAdornment:<InputAdornment position="end">cm</InputAdornment>
               }}
-              placeholder='Breadth of Product'
-              value={formState.attributes.find((attr: any) => attr.k === 'breadth')?.v || ''}
-              onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'breadth', value: e.target.value })}
+              placeholder='Height of Product'
+              value={formState.attributes.find((attr: any) => attr.k === 'height')?.v || ''}
+              onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'height', value: e.target.value })}
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>

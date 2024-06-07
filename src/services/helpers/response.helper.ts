@@ -5,13 +5,19 @@ export default function ResponseHelper() {
 
     const SuccessResponse = async (data: any, message: string = 'Success') => {
         
-        return await NextResponse.json({
+        return await NextResponse
+        .json({
             data,
             message,
             isError: false,
             status: 200,
         }, {
-            status: 200
+            status: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+              }
         });
     }
 
@@ -23,7 +29,12 @@ export default function ResponseHelper() {
             isError: false,
             status: 201,
         }, {
-            status: 201
+            status: 201,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+              }
         });
     }
 

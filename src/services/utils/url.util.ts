@@ -1,6 +1,6 @@
 export function urlBuilder(path: string, params?: {[key:string]:string|string[]}): string {
     let queryString: string =
-    process.env.API_DOMAIN || "https://world-history-cms.vercel.app/" + path
+    process.env.API_DOMAIN || "https://world-history-cms.vercel.app" + path
   
       if (params) {
         const query = Object.entries(params)

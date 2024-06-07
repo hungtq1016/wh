@@ -100,15 +100,17 @@ model Product {
 }
 
 model Image {
-  id        String   @id @default(uuid())
-  url       String
-  alt       String
-  productId String?
-  userId    String?
-  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String     @id @default(uuid())
+  url         String
+  alt         String
+  productId   String?
+  userId      String?
+  billBoardId String?
+  product     Product?   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  billBoards  BillBoard? @relation(fields: [billBoardId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Order {
@@ -168,7 +170,7 @@ model BillBoard {
   title     String
   content   String
   link      String
-  imageUrl  String
+  image     Image[]
   position  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

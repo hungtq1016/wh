@@ -5,45 +5,84 @@ import { NextRequest } from "next/server";
 const { SuccessResponse, InternalServerErrorResponse, NotFoundResponse, CreatedResponse } = ResponseHelper();
 
 export async function GET(req: NextRequest) {
+
+    const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '10');
+    const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') || '1');
+    const searchBy = req.nextUrl.searchParams.getAll('searchBy');
+    const searchValue = req.nextUrl.searchParams.getAll('searchValue');
+    const orderBy = req.nextUrl.searchParams.get('orderBy') || 'id';
+    const orderType = req.nextUrl.searchParams.get('orderType') || 'asc';
+    const filterBy = req.nextUrl.searchParams.getAll('filterBy') || [];
+
+    const skip = (pageNumber - 1) * pageSize;
+    const take = pageSize;
     try {
-        const [type,value,...data] = req.nextUrl.searchParams.getAll("includes");
-        console.log(type,value,data)
-        let images = [] as any;
+        let data = null;
+        let total = 0;
 
-        switch (type) {
-            case 'user':
-                images = await prisma.image.findMany({
-                    where: { userId : { not : null } }
-                });
-                break;
+        const searchConditions = searchBy.length && searchValue.length
+            ? searchBy.map((field, index) => ({ [field]: { contains: searchValue[index] } }))
+            : [];
 
-            case 'product':
-                images = await prisma.image.findMany({
-                    where: { productId : { not : null} },
-                });
-                break;
+        const filterByConditions = filterBy.length > 0 ? filterBy.map((field) => ({ [field]: { not: null } })) : [];
 
-            case 'allnull':
-                images = await prisma.image.findMany({
-                    where: {
-                        AND : [
-                            { productId : null },
-                            { userId : null }
-                        ]
-                    }
-                });
-                break;
-        
-            default:
-                images = await prisma.image.findMany();
-                break;
+        if (searchConditions.length > 0) {
+
+            data = await prisma.image.findMany({
+                skip,
+                take,
+                where: {
+                    OR: [
+                        {
+                            AND: filterByConditions
+                        },
+                        ...searchConditions
+                    ]
+                },
+                orderBy: { [orderBy]: orderType }
+            });
+            total = await prisma.image.count({
+                where: {
+                    OR: [
+                        {
+                            AND: filterByConditions
+                        },
+                        ...searchConditions
+                    ]
+                }
+            });
+        } else {
+            data = await prisma.image.findMany({
+                where: {
+                    AND: filterByConditions
+                },
+                skip,
+                take,
+                orderBy: { [orderBy]: orderType }
+            });
+            total = await prisma.image.count();
         }
 
-        if (!images) {
+        if (!data) {
             return NotFoundResponse(null, "Images not found");
         }
 
-        return SuccessResponse(images);
+        const lastPage = Math.ceil(total / pageSize);
+        const metadata = {
+            total,
+            pageSize,
+            pageNumber,
+            searchBy,
+            searchValue,
+            orderBy,
+            orderType,
+            nextPage: pageNumber < lastPage ? pageNumber + 1 : null,
+            prevPage: pageNumber > 1 ? pageNumber - 1 : null,
+            firstPage: 1,
+            lastPage
+        };
+
+        return SuccessResponse({data,metadata});
     } catch (error) {
  
         return InternalServerErrorResponse(error);

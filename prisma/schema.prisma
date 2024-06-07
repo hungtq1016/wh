@@ -79,24 +79,24 @@ model RefreshToken {
 }
 
 model Product {
-  id               String           @id @default(uuid())
-  name             String           @unique
-  slug             String           @unique
-  description      String
-  about String
-  sku              String           @unique
-  salePrice        String
-  price            String
-  isSale           Boolean
-  quantity         Int
-  attributes       Json
-  images           Image[]
-  orders           OrderOnProduct[]
-  reviews          Review[]
-  variants         ProductVariant[]
-  stockHistories   StockHistory[]
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
+  id             String           @id @default(uuid())
+  name           String           @unique
+  slug           String           @unique
+  description    String
+  about          String
+  sku            String           @unique
+  salePrice      String
+  price          String
+  isSale         Boolean
+  quantity       Int
+  attributes     Json
+  images         Image[]
+  orders         OrderOnProduct[]
+  reviews        Review[]
+  variants       ProductVariant[]
+  stockHistories StockHistory[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model Image {

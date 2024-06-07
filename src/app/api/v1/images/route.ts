@@ -10,8 +10,8 @@ export async function GET(req: NextRequest) {
     const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') || '1');
     const searchBy = req.nextUrl.searchParams.getAll('searchBy');
     const searchValue = req.nextUrl.searchParams.getAll('searchValue');
-    const orderBy = req.nextUrl.searchParams.get('orderBy') || 'id';
-    const orderType = req.nextUrl.searchParams.get('orderType') || 'asc';
+    const orderBy = req.nextUrl.searchParams.get('orderBy') || 'updatedAt';
+    const orderType = req.nextUrl.searchParams.get('orderType') || 'desc';
     const filterBy = req.nextUrl.searchParams.getAll('filterBy') || [];
 
     const skip = (pageNumber - 1) * pageSize;
@@ -24,7 +24,13 @@ export async function GET(req: NextRequest) {
             ? searchBy.map((field, index) => ({ [field]: { contains: searchValue[index] } }))
             : [];
 
-        const filterByConditions = filterBy.length > 0 ? filterBy.map((field) => ({ [field]: { not: null } })) : [];
+
+        const filterByConditions = filterBy.length > 0 ? filterBy.map((field) => {
+            if (filterBy.length === 1) {
+                return { [field]: { not: null } }
+            }
+            return { [field]: null }
+        }) : [];
 
         if (searchConditions.length > 0) {
 
@@ -32,23 +38,15 @@ export async function GET(req: NextRequest) {
                 skip,
                 take,
                 where: {
-                    OR: [
-                        {
-                            AND: filterByConditions
-                        },
-                        ...searchConditions
-                    ]
+                    AND: filterByConditions,
+                    OR: searchConditions
                 },
                 orderBy: { [orderBy]: orderType }
             });
             total = await prisma.image.count({
                 where: {
-                    OR: [
-                        {
-                            AND: filterByConditions
-                        },
-                        ...searchConditions
-                    ]
+                    AND: filterByConditions,
+                    OR: searchConditions
                 }
             });
         } else {
@@ -60,7 +58,11 @@ export async function GET(req: NextRequest) {
                 take,
                 orderBy: { [orderBy]: orderType }
             });
-            total = await prisma.image.count();
+            total = await prisma.image.count({
+                where: {
+                    AND: filterByConditions
+                }
+            });
         }
 
         if (!data) {
@@ -101,7 +103,6 @@ export async function POST(req: Request) {
         return CreatedResponse(images);
 
     } catch (error) {
-        console.log(error)
         return InternalServerErrorResponse(error);
     }
 }

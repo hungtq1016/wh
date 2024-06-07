@@ -10,8 +10,8 @@ export async function GET(req: NextRequest) {
     const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') || '1');
     const searchBy = req.nextUrl.searchParams.getAll('searchBy');
     const searchValue = req.nextUrl.searchParams.getAll('searchValue');
-    const orderBy = req.nextUrl.searchParams.get('orderBy') || 'id';
-    const orderType = req.nextUrl.searchParams.get('orderType') || 'asc';
+    const orderBy = req.nextUrl.searchParams.get('orderBy') || 'updatedAt';
+    const orderType = req.nextUrl.searchParams.get('orderType') || 'desc';
 
     const skip = (pageNumber - 1) * pageSize;
     const take = pageSize;
@@ -101,8 +101,8 @@ export async function POST(req: Request) {
                 description,
                 shortDescription,
                 sku,
-                salePrice: Number(salePrice),
-                price: Number(price),
+                salePrice,
+                price,
                 isSale,
                 quantity: Number(quantity),
                 attributes

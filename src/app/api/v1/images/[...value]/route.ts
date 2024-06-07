@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/libs/db";
 import ResponseHelper from "@/services/helpers/response.helper";
-import * as bcrypt from 'bcrypt';
 
 const { SuccessResponse, InternalServerErrorResponse, BadRequestResponse, NotFoundResponse } = ResponseHelper();
 

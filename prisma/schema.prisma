@@ -85,8 +85,8 @@ model Product {
   description      String
   shortDescription String
   sku              String           @unique
-  salePrice        BigInt
-  price            BigInt
+  salePrice        String
+  price            String
   isSale           Boolean
   quantity         Int
   attributes       Json

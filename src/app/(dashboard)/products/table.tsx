@@ -18,7 +18,8 @@ export default function DataTable() {
   const [rows, setRows] = React.useState<any[]>([]);
   React.useEffect(() => {
     getData("/api/v1/products").then((data) => {
-      setRows(data)
+      const { data: rows, metadata } = data
+      setRows(rows)
     })
   }, [])
 

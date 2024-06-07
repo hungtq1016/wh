@@ -70,14 +70,15 @@ function useHandleEdit({ row }: { row: any }) {
   );
 }
 
-export default function DataTable({ query, route }: { query?: string[], route?: string }) {
+export default function DataTable({ query, route }: { query?: any, route?: string }) {
 
   const [rows, setRows] = React.useState<any[]>([]);
   const [isOpen, setIsOpen] = React.useState(false)
   const [selectedImage, setSelectedImage] = React.useState('')
   React.useEffect(() => {
     getData(urlBuilder("/api/v1/images", query)).then((data) => {
-      setRows(data)
+      const { data:rows, metadata } = data
+      setRows(rows)
     })
   }, [query])
 

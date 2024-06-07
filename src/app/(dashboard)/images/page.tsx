@@ -14,16 +14,27 @@ export default function ImagesPage(){
                     <Heading.Desc>Manage your images </Heading.Desc>
                 </Heading>
                 <H1>Images by users</H1>
-                <DataTable query={["user"]} route="users"/>
+                <DataTable 
+                    query={{
+                        filterBy : 'userId'
+                    }} 
+                    route="users"/>
             </div>
             <div>
                 <H1>Images base on products</H1>
-                <DataTable query={["product"]} route="products"/>
+                <DataTable 
+                    query={{
+                        filterBy : 'productId'
+                    }} 
+                    route="products"/>
             </div>
             <div>
-                
                 <H1>Images don&apos;t use</H1>
-                <DataTable query={["allnull"]} />
+                <DataTable
+                     query={{
+                        filterBy : ['productId', 'userId']
+                     }}
+                />
             </div>
         </div>
     )

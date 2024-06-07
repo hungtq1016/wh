@@ -1,15 +1,22 @@
-export function urlBuilder(path: string, params?: string[]): string {
+export function urlBuilder(path: string, params?: {[key:string]:string|string[]}): string {
     let queryString: string =
-        process.env.API_DOMAIN || "http://localhost:3000" + path
-
-    if (params) {
-        const query = params // Lọc bỏ các giá trị rỗng
-            .map((value) => `includes=${encodeURIComponent(value)}`)
-            .join('&');
+    process.env.API_DOMAIN || "http://localhost:3000" + path
+  
+      if (params) {
+        const query = Object.entries(params)
+          .filter(([key, value]) => value !== undefined && value !== null && value !== '') // Lọc bỏ các giá trị rỗng
+          .map(([key, value]) => {
+            if (Array.isArray(value)) {
+              return value.map((v) => `${key}=${v}`).join('&');
+            }
+            return `${key}=${value}`;
+          })
+          .join('&');
         if (query) { // Chỉ thêm query nếu có nội dung
-            queryString += `?${query}`;
+          queryString += `?${query}`;
         }
-    }
-
+      }
+  
     return queryString
-}
+  }
+  

@@ -102,7 +102,7 @@ export async function POST(req: Request) {
                 about,
                 sku,
                 salePrice : String(salePrice),
-                price,
+                price : String(price),
                 isSale,
                 quantity: Number(quantity),
                 attributes
@@ -122,7 +122,6 @@ export async function POST(req: Request) {
         return CreatedResponse(product);
 
     } catch (error) {
- 
         return InternalServerErrorResponse(error);
     }
 }

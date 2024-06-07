@@ -405,7 +405,7 @@ export default function ProductFrom() {
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
             <InputLabel htmlFor='description'>Description</InputLabel>
             <Editor
-              apiKey='x2mbne82d1ahg21bvjw08te0e8gnlwxtk7h5smawt6bdr53k'
+              apiKey='djw4c7uq7gsbbh61pf3lb9ysv0rtt0rq159cg1mzs8xkarpy'
               id='description'
               init={{
                 plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
@@ -427,7 +427,7 @@ export default function ProductFrom() {
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
             <InputLabel htmlFor='about'>About</InputLabel>
             <Editor
-              apiKey='x2mbne82d1ahg21bvjw08te0e8gnlwxtk7h5smawt6bdr53k'
+              apiKey='djw4c7uq7gsbbh61pf3lb9ysv0rtt0rq159cg1mzs8xkarpy'
               id='about'
               init={{
                 plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',

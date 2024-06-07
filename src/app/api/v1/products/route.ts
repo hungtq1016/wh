@@ -122,7 +122,7 @@ export async function POST(req: Request) {
         return CreatedResponse(product);
 
     } catch (error) {
-        console.log(error);
+ 
         return InternalServerErrorResponse(error);
     }
 }

@@ -76,22 +76,18 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request) {
     try {
+        const exist = await prisma.product.count()
+
+        if (exist > 0) {
+            return ConflictResponse(null, "Only one product is allowed");
+        }
+
         const { name, slug, description, about, sku, salePrice, price, isSale, quantity, attributes, images } = await req.json();
        
         const fields = pushFieldToFields({ name, slug, description, about, sku, salePrice, price, isSale, quantity, attributes });
 
         if (!fields) {
             return FiledsErrorResponse(null, 400, fields);
-        }
-
-        const existingProduct = await prisma.product.findUnique({
-            where: {
-                name
-            }
-        });
-
-        if (existingProduct) {
-            return ConflictResponse(null, "Name already exists");
         }
 
         const product = await prisma.product.create({

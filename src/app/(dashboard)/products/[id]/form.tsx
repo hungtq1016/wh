@@ -1,18 +1,18 @@
 'use client'
 import * as React from 'react';
 import ImageModal from '@/ui/modals/image.modal';
-import { Alert, Button, Checkbox, InputAdornment, InputLabel, MenuItem, Select, Snackbar, TextField } from '@mui/material';
+import { Button, Checkbox, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Image from 'next/image';
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { slugify } from '@/services/utils/string.util';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { Switch } from '@headlessui/react';
 
 const initialState = {
-
   name: '',
   slug: '',
   description: '',
@@ -93,7 +93,7 @@ export default function ProductFrom() {
 
   const [formState, formDispatch] = React.useReducer(formReducer, initialState);
   const [loading, setLoading] = React.useState(false);
-  const [snack , setSnack] = React.useState(false);
+  
   React.useEffect(() => {
     getData("/api/v1/products/id/"+id).then((res) => {
       formDispatch({ type: 'UPDATE', data: res })
@@ -112,15 +112,14 @@ export default function ProductFrom() {
     setLoading(true);
     axios.delete(`/api/v1/images/id/${formState.images[index].id}`)
       .then((res) => {
-       
+        toast.success('Image deleted successfully!');
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error);
       })
       .finally(() => {
         formDispatch({ type: 'CHANGE', field: 'images', value: formState.images.filter((img: any, i: number) => i !== index) });
         setLoading(false)
-
       });
   }
 
@@ -129,10 +128,10 @@ export default function ProductFrom() {
     setLoading(true);
     axios.put(`/api/v1/products/id/${id}`, formState)
       .then((res) => {
-
+        toast.success('Product updated successfully!');
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error);
       })
       .finally(() => {
         setLoading(false)
@@ -261,35 +260,54 @@ export default function ProductFrom() {
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor='discount'>Discount</InputLabel>
             <div className="flex gap-2 items-center">
-              <Checkbox
-                id='discount'
+              <div className="basis-14">
+              <Switch
                 checked={formState.isSale}
-                onChange={(e) => formDispatch({ type: 'CHANGE', field: 'isSale', value: e.target.checked })}
-              />
+                onChange={(e) => formDispatch({ type: 'CHANGE', field: 'isSale', value: e })}
+                className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-red-600/10 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-green-600/10"
+              >
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7"
+                />
+              </Switch>
+              </div>
               <span>This product will sale with discount price!</span>
             </div>
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor='freeship'>Free shipping</InputLabel>
             <div className="flex gap-2 items-center">
-              <Checkbox
-                id='freeship'
-                checked={formState.attributes.find((attr: any) => attr.k === 'free-shipping')?.v || ''}
-                onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'free-shipping', value: e.target.value })}
-
-              />
+              <div className="basis-14">
+                <Switch
+                  checked={formState.attributes.find((attr: any) => attr.k === 'free-shipping')?.v || false}
+                  onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'free-shipping', value: e })}
+                  className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-red-600/10 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-green-600/10"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7"
+                  />
+                </Switch>
+              </div>
               <span>The free shipping program will be applied!</span>
             </div>
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor='Refund'>Refund</InputLabel>
             <div className="flex gap-2 items-center">
-              <Checkbox
-                id='Refund'
-                checked={formState.attributes.find((attr: any) => attr.k === 'refund')?.v || ''}
-                onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'refund', value: e.target.value })}
-
-              />
+              <div className="basis-14">
+                <Switch
+                  checked={formState.attributes.find((attr: any) => attr.k === 'refund')?.v || false}
+                  onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'refund', value: e })}
+                  className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-red-600/10 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-green-600/10"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7"
+                  />
+                </Switch>
+              </div>
               <span>This product will be eligible for refund!</span>
             </div>
           </div>
@@ -468,20 +486,6 @@ export default function ProductFrom() {
           </div>
         </div>)
       }
-      <Snackbar 
-        open={snack}
-        autoHideDuration={1000}
-        anchorOrigin={{ vertical:'bottom', horizontal:"right" }}
-        onClose={() => setSnack(false)}
-       >
-        <Alert
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          Success!
-        </Alert>
-      </Snackbar>
     </>
   )
 }

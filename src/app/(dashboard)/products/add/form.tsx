@@ -9,7 +9,8 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { toast } from 'react-toastify';
 
 export default function ProductFrom() {
   const router = useRouter();
@@ -94,14 +95,15 @@ export default function ProductFrom() {
   const onDeleteImage = (index: number) => {
     setLoading(true);
     axios.delete(`/api/v1/images/id/${formState.images[index].id}`)
-      .then((res) => { })
+      .then((res) => {
+        toast.success('Image deleted successfully');
+      })
       .catch((error) => {
-        console.log(error);
+        toast.error('Error while deleting image');
       })
       .finally(() => {
         formDispatch({ type: 'CHANGE', field: 'images', value: formState.images.filter((img: any, i: number) => i !== index) });
         setLoading(false)
-
       });
   }
 
@@ -110,10 +112,13 @@ export default function ProductFrom() {
     setLoading(true);
     axios.post('/api/v1/products', formState)
       .then((res) => {
-        console.log(res);
+        toast.success('Product created successfully');
       })
       .catch((error) => {
-        console.log(error);
+        if(error.response.data.status)
+          toast.error(error.response.data.message)
+        else
+          toast.error('Error while creating product');
       })
       .finally(() => {
         setLoading(false)

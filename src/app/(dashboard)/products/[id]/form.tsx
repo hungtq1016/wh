@@ -16,7 +16,7 @@ const initialState = {
   name: '',
   slug: '',
   description: '',
-  shortDescription: '',
+  about: '',
   sku: '',
   salePrice: 0,
   price: 1000000,
@@ -46,6 +46,14 @@ const initialState = {
     {
       k: 'cover',
       v: 'hard-cover'
+    },
+    {
+      k: 'free-shipping',
+      v: false
+    },
+    {
+      k: 'refund',
+      v: false
     }
   ],
   images: []
@@ -202,7 +210,7 @@ export default function ProductFrom() {
                 handleUpdate={onImageUpdate}
                 className='col-span-12 space-y-2' />
           }
-          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 space-y-2'>
+          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor="price">Price</InputLabel>
             <TextField
               className='w-full'
@@ -218,7 +226,7 @@ export default function ProductFrom() {
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'price', value: e.target.value })}
             />
           </div>
-          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 space-y-2'>
+          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor="sale">Sale Price</InputLabel>
             <TextField
               className='w-full'
@@ -234,7 +242,7 @@ export default function ProductFrom() {
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'salePrice', value: e.target.value })}
             />
           </div>
-          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 space-y-2'>
+          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor="quantity">Quantity</InputLabel>
             <TextField
               className='w-full'
@@ -250,7 +258,7 @@ export default function ProductFrom() {
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'quantity', value: e.target.value })}
             />
           </div>
-          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 space-y-2'>
+          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor='discount'>Discount</InputLabel>
             <div className="flex gap-2 items-center">
               <Checkbox
@@ -259,6 +267,30 @@ export default function ProductFrom() {
                 onChange={(e) => formDispatch({ type: 'CHANGE', field: 'isSale', value: e.target.checked })}
               />
               <span>This product will sale with discount price!</span>
+            </div>
+          </div>
+          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
+            <InputLabel htmlFor='freeship'>Free shipping</InputLabel>
+            <div className="flex gap-2 items-center">
+              <Checkbox
+                id='freeship'
+                checked={formState.attributes.find((attr: any) => attr.k === 'free-shipping')?.v || ''}
+                onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'free-shipping', value: e.target.value })}
+
+              />
+              <span>The free shipping program will be applied!</span>
+            </div>
+          </div>
+          <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
+            <InputLabel htmlFor='Refund'>Refund</InputLabel>
+            <div className="flex gap-2 items-center">
+              <Checkbox
+                id='Refund'
+                checked={formState.attributes.find((attr: any) => attr.k === 'refund')?.v || ''}
+                onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'refund', value: e.target.value })}
+
+              />
+              <span>This product will be eligible for refund!</span>
             </div>
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
@@ -358,7 +390,7 @@ export default function ProductFrom() {
               <MenuItem value='pdf'>PDF</MenuItem>
             </Select>
           </div>
-          <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
+          {/* <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
             <InputLabel htmlFor='description' >Description</InputLabel>
             <TextareaAutosize
               className='w-full border border-gray-300 rounded p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-900'
@@ -369,12 +401,12 @@ export default function ProductFrom() {
               value={formState.description}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'description', value: e.target.value })}
             />
-          </div>
+          </div> */}
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
-            <InputLabel htmlFor='short-description' >Short Description</InputLabel>
+            <InputLabel htmlFor='description'>Description</InputLabel>
             <Editor
               apiKey='x2mbne82d1ahg21bvjw08te0e8gnlwxtk7h5smawt6bdr53k'
-              id='short-description'
+              id='description'
               init={{
                 plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
                 toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
@@ -386,9 +418,31 @@ export default function ProductFrom() {
                 ],
                 ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
               }}
-              value={formState.shortDescription}
+              value={formState.description}
               onEditorChange={(content, editor) => {
-                formDispatch({ type: 'CHANGE', field: 'shortDescription', value: content });
+                formDispatch({ type: 'CHANGE', field: 'description', value: content });
+              }}
+            />
+          </div>
+          <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
+            <InputLabel htmlFor='about'>About</InputLabel>
+            <Editor
+              apiKey='x2mbne82d1ahg21bvjw08te0e8gnlwxtk7h5smawt6bdr53k'
+              id='about'
+              init={{
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                tinycomments_mode: 'embedded',
+                tinycomments_author: 'Author name',
+                mergetags_list: [
+                  { value: 'First.Name', title: 'First Name' },
+                  { value: 'Email', title: 'Email' },
+                ],
+                ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+              }}
+              value={formState.about}
+              onEditorChange={(content, editor) => {
+                formDispatch({ type: 'CHANGE', field: 'about', value: content });
               }}
             />
           </div>

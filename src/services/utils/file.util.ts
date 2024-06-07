@@ -24,13 +24,3 @@ export const toBase64Image = async (url: string | URL | Request) => {
     return buff.type.startsWith('image/') ? await toBase64Async(buff) : '';
 
 }
-
-
-async function checkImage(url: string | URL | Request) {
-
-    const res = await fetch(url);
-    const buff = await res.blob();
-
-    return buff.type.startsWith('image/')
-
-}

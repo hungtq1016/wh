@@ -76,9 +76,9 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request) {
     try {
-        const { name, slug, description, shortDescription, sku, salePrice, price, isSale, quantity, attributes, images } = await req.json();
+        const { name, slug, description, about, sku, salePrice, price, isSale, quantity, attributes, images } = await req.json();
        
-        const fields = pushFieldToFields({ name, slug, description, shortDescription, sku, salePrice, price, isSale, quantity, attributes });
+        const fields = pushFieldToFields({ name, slug, description, about, sku, salePrice, price, isSale, quantity, attributes });
 
         if (!fields) {
             return FiledsErrorResponse(null, 400, fields);
@@ -99,7 +99,7 @@ export async function POST(req: Request) {
                 name,
                 slug,
                 description,
-                shortDescription,
+                about,
                 sku,
                 salePrice,
                 price,

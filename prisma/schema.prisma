@@ -83,7 +83,7 @@ model Product {
   name             String           @unique
   slug             String           @unique
   description      String
-  shortDescription String
+  about String
   sku              String           @unique
   salePrice        String
   price            String

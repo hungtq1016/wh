@@ -42,7 +42,7 @@ export default function ProductsLayout({ children }: { children: React.ReactNode
             payload: pathname
         });
         
-    }, [asideDispatch, navigationData]);
+    }, [asideDispatch, navigationData, pathname]);
 
     return (
         <>

@@ -29,10 +29,18 @@ export default function ImagesPage(){
                     route="products"/>
             </div>
             <div>
+                <H1>Images base on products</H1>
+                <DataTable 
+                    query={{
+                        filterBy : 'billBoardId'
+                    }} 
+                    />
+            </div>
+            <div>
                 <H1>Images don&apos;t use</H1>
                 <DataTable
                      query={{
-                        filterBy : ['productId', 'userId']
+                        filterBy : ['productId', 'userId','billBoardId']
                      }}
                 />
             </div>

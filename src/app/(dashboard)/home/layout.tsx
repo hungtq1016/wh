@@ -1,35 +1,91 @@
 'use client'
 import { AsideContext } from '@/libs/contexts/AsideContext'
-import { FolderPlusIcon, PencilSquareIcon, TableCellsIcon } from '@heroicons/react/24/outline'
 import { useContext, useEffect, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
-import { ViewCarouselOutlined, VrpanoOutlined } from '@mui/icons-material'
+import { CompareArrowsOutlined, ContactEmergencyOutlined, FilterFramesOutlined, InfoOutlined, PanoramaOutlined, RecentActorsOutlined, ShoppingCartCheckout, SlideshowOutlined, ViewCarouselOutlined, ViewColumnOutlined, VrpanoOutlined } from '@mui/icons-material'
 export default function ProductsLayout({ children }: { children: React.ReactNode }) {
     const { asideDispatch } = useContext(AsideContext)
     const pathname = usePathname()
 
     const navigationData = useMemo(() => [
         {
-            name: 'Products',
+            name: 'Hero Section',
             href: '/home/hero',
             icon: VrpanoOutlined,
             value: 'view',
             current: true
         },
         {
-            name: 'Add Product',
-            href: '/products/add',
-            icon: FolderPlusIcon,
-            value: 'add',
+            name: 'Cover Section',
+            href: '/home/cover',
+            icon: ViewColumnOutlined,
+            value: 'view',
             current: false
         },
         {
-            name: 'Edit Product',
-            href: '?',
-            value: 'edit',
-            icon: PencilSquareIcon,
+            name: 'About Section',
+            href: '/home/about',
+            value: 'view',
+            icon: ViewCarouselOutlined,
             current: false
-        }
+        },
+        {
+            name: 'Special Section',
+            href: '/home/special',
+            value: 'view',
+            icon: SlideshowOutlined,
+            current: false
+        },
+        {
+            name: 'Creation Section',
+            href: '/home/creation',
+            value: 'view',
+            icon: RecentActorsOutlined,
+            current: false
+        },
+        {
+            name: 'Timeline Section',
+            href: '/home/timeline',
+            value: 'view',
+            icon: PanoramaOutlined,
+            current: false
+        },
+        {
+            name: 'Compare Section',
+            href: '/home/compare',
+            value: 'view',
+            icon: CompareArrowsOutlined,
+            current: false
+        },
+        {
+            name: 'Frame Section',
+            href: '/home/frame',
+            value: 'view',
+            icon: FilterFramesOutlined,
+            current: false
+        },
+        {
+            name: 'Author Section',
+            href: '/home/author',
+            value: 'view',
+            icon: ContactEmergencyOutlined,
+            current: false
+        },
+        {
+            name: 'Description Section',
+            href: '/home/description',
+            value: 'view',
+            icon: InfoOutlined,
+            current: false
+        },
+        {
+            name: 'Shop Section',
+            href: '/home/shop',
+            value: 'view',
+            icon: ShoppingCartCheckout,
+            current: false
+        },
+        
     ], []); 
 
     useEffect(() => {
@@ -43,7 +99,7 @@ export default function ProductsLayout({ children }: { children: React.ReactNode
             payload: pathname
         });
         
-    }, [asideDispatch, navigationData]);
+    }, [asideDispatch, navigationData, pathname]);
 
     return (
         <>

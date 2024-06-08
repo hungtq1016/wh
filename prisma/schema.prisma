@@ -170,7 +170,7 @@ model BillBoard {
   title     String
   content   String
   link      String
-  image     Image[]
+  images    Image[]
   position  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

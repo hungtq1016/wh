@@ -22,7 +22,7 @@ const initialState = {
   title: '',
   link: '',
   content: '',
-  position: 'home-hero',
+  position: 'home-description',
   images: [] as any[]
 }
 
@@ -34,7 +34,7 @@ export default function DataTable() {
   const [update, setUpdate] = React.useState(false);
 
   React.useEffect(() => {
-    getData("/api/v1/billboards?position=home-hero").then((data) => {
+    getData("/api/v1/billboards?position=home-description").then((data) => {
       setRows(data);
     });
   }, []);
@@ -84,7 +84,7 @@ export default function DataTable() {
 
   const handleCreate = async () => {
     if (rows.length > 0) {
-      toast.error('Hero only allows one billboard');
+      toast.error('Description only allows one billboard');
     } else {
       setLoading(true);
       try {
@@ -210,7 +210,7 @@ export default function DataTable() {
                 </div>
                 :
                 <ImageModal
-                  multiple={false}
+                  multiple={true}
                   handleUpdate={(images:any) => handleChange('images', images)}
                   className='col-span-12 space-y-2'
                 />

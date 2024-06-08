@@ -206,8 +206,9 @@ export default function ProductFrom() {
 
               :
               <ImageModal
-                handleUpdate={onImageUpdate}
-                className='col-span-12 space-y-2' />
+                  multiple={true}
+                  handleUpdate={onImageUpdate}
+                  className='col-span-12 space-y-2' />
           }
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
             <InputLabel htmlFor="price">Price</InputLabel>

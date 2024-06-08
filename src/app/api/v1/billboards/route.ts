@@ -1,12 +1,26 @@
 import { prisma } from "@/libs/db";
 import ResponseHelper from '@/services/helpers/response.helper';
-import * as bcrypt from 'bcrypt';
+import { NextRequest } from "next/server";
 
-const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFoundResponse, ConflictResponse, CreatedResponse } = ResponseHelper();
+const { SuccessResponse, InternalServerErrorResponse, NotFoundResponse, CreatedResponse } = ResponseHelper();
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+
+    const position = req.nextUrl.searchParams.get('position');
+
     try {
-        const data = await prisma.billBoard.findMany();
+        let data = null;
+
+        if (position) {
+            data = await prisma.billBoard.findMany({ 
+                where: { position },
+                include: { images: true }
+             });
+        }else{
+            data = await prisma.billBoard.findMany({
+                include: { images: true }
+            });
+        }
 
         if (!data) {
             return NotFoundResponse(null, "Billboards not found");
@@ -20,13 +34,24 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
     try {
-        const { title, content, link, imageUrl, position, image } = await req.json();
+        const { id, title, content, link, position, images } = await req.json();
         
         const data = await prisma.billBoard.create({
             data: {
-                title, content, link, imageUrl, position, image
+                id, title, content, link, position
             }
         });
+
+        if (images && images.length > 0) {
+            const updatePromises = images.map((image: any) => {
+                return prisma.image.update({
+                    where: { id: image.id },
+                    data: { ...image, billBoardId: data.id }
+                });
+            });
+
+            await Promise.all(updatePromises);
+        }
 
         return CreatedResponse(data);
 

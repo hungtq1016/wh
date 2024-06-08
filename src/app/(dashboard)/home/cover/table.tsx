@@ -22,7 +22,7 @@ const initialState = {
   title: '',
   link: '',
   content: '',
-  position: 'home-hero',
+  position: 'home-cover',
   images: [] as any[]
 }
 
@@ -34,7 +34,7 @@ export default function DataTable() {
   const [update, setUpdate] = React.useState(false);
 
   React.useEffect(() => {
-    getData("/api/v1/billboards?position=home-hero").then((data) => {
+    getData("/api/v1/billboards?position=home-cover").then((data) => {
       setRows(data);
     });
   }, []);
@@ -79,19 +79,20 @@ export default function DataTable() {
     } finally {
       setLoading(false);
       setUpdate(false);
+      setFormState({ ...initialState });
     }
   }
 
   const handleCreate = async () => {
-    if (rows.length > 0) {
-      toast.error('Hero only allows one billboard');
+    if (rows.length >= 3) {
+      toast.error('Cover only allows 3 billboards');
     } else {
       setLoading(true);
       try {
         formState.id = v4();
         await axios.post('/api/v1/billboards', formState);
         toast.success('Billboard created successfully');
-        setRows([formState]);
+        setRows((prevRows) => [...prevRows, formState]);
         setFormState({...initialState});
       } catch (error:any) {
         toast.error(error.response?.data?.message || 'Error while creating billboard');
@@ -276,6 +277,5 @@ export default function DataTable() {
         </div>)
       }
     </div>
-    
   );
 }

@@ -22,19 +22,19 @@ const initialState = {
   title: '',
   link: '',
   content: '',
-  position: 'home-hero',
+  position: 'home-about',
   images: [] as any[]
 }
 
 export default function DataTable() {
 
   const [rows, setRows] = React.useState<any[]>([]);
-  const [formState, setFormState] = React.useState({...initialState});
+  const [formState, setFormState] = React.useState({ ...initialState });
   const [loading, setLoading] = React.useState(false);
   const [update, setUpdate] = React.useState(false);
 
   React.useEffect(() => {
-    getData("/api/v1/billboards?position=home-hero").then((data) => {
+    getData("/api/v1/billboards?position=home-about").then((data) => {
       setRows(data);
     });
   }, []);
@@ -71,7 +71,7 @@ export default function DataTable() {
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      await axios.put('/api/v1/billboards/id/'+formState.id, formState);
+      await axios.put('/api/v1/billboards/id/' + formState.id, formState);
       toast.success('Billboards updated successfully');
       setRows((prevRows) => prevRows.map((row: any) => row.id === formState.id ? formState : row));
     } catch {
@@ -79,25 +79,22 @@ export default function DataTable() {
     } finally {
       setLoading(false);
       setUpdate(false);
+      setFormState({ ...initialState });
     }
   }
 
   const handleCreate = async () => {
-    if (rows.length > 0) {
-      toast.error('Hero only allows one billboard');
-    } else {
-      setLoading(true);
-      try {
-        formState.id = v4();
-        await axios.post('/api/v1/billboards', formState);
-        toast.success('Billboard created successfully');
-        setRows([formState]);
-        setFormState({...initialState});
-      } catch (error:any) {
-        toast.error(error.response?.data?.message || 'Error while creating billboard');
-      } finally {
-        setLoading(false);
-      }
+    setLoading(true);
+    try {
+      formState.id = v4();
+      await axios.post('/api/v1/billboards', formState);
+      toast.success('Billboard created successfully');
+      setRows((prevRows) => [...prevRows, formState]);
+      setFormState({ ...initialState });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Error while creating billboard');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -105,7 +102,7 @@ export default function DataTable() {
     e.preventDefault();
     if (update) {
       handleUpdate();
-    }else{
+    } else {
       handleCreate();
     }
   };
@@ -125,7 +122,7 @@ export default function DataTable() {
       headerName: 'Images',
       sortable: false,
       renderCell: ({ row }: { row: any }) => {
-       return row.images && (
+        return row.images && (
           <Image
             key={row.images[0].id}
             width={80}
@@ -211,7 +208,7 @@ export default function DataTable() {
                 :
                 <ImageModal
                   multiple={false}
-                  handleUpdate={(images:any) => handleChange('images', images)}
+                  handleUpdate={(images: any) => handleChange('images', images)}
                   className='col-span-12 space-y-2'
                 />
             }
@@ -229,7 +226,7 @@ export default function DataTable() {
                     { value: 'First.Name', title: 'First Name' },
                     { value: 'Email', title: 'Email' },
                   ],
-                  ai_request: (request:any, respondWith:any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+                  ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
                 }}
                 value={formState.content}
                 onEditorChange={(content) => handleChange('content', content)}
@@ -276,6 +273,5 @@ export default function DataTable() {
         </div>)
       }
     </div>
-    
   );
 }

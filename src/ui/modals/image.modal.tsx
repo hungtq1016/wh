@@ -30,20 +30,35 @@ interface IImage {
     alt: string
 }
 
-export default function ImageModal(props: { className?: string, handleUpdate?: any }) {
+export default function ImageModal({multiple = true, className, handleUpdate}: {multiple: boolean , className?: string, handleUpdate?: any }) {
     let [isOpen, setIsOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [images, setImages] = useState([] as IImage[])
 
     const onImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+   
+        if (!multiple) {
+            setImages([])
+        }
+
         const files = e.target.files;
         if (files) {
-            const newImages: IImage[] = await Promise.all(Array.from(files).map(async file => ({
-                id: v4(),
-                url: await toBase64Async(file),
-                alt: file.name
-            })));
-            setImages(prevImages => [...prevImages, ...newImages]);
+            if(multiple){
+                const newImages: IImage[] = await Promise.all(Array.from(files).map(async file => ({
+                    id: v4(),
+                    url: await toBase64Async(file),
+                    alt: file.name
+                })));
+                setImages(prevImages => [...prevImages, ...newImages]);
+            }else{
+                const file = files[0];
+                const newImage: IImage = {
+                    id: v4(),
+                    url: await toBase64Async(file),
+                    alt: file.name
+                }
+                setImages([newImage]);
+            }
         }
     };
 
@@ -57,8 +72,8 @@ export default function ImageModal(props: { className?: string, handleUpdate?: a
         axios.post('/api/v1/images', images)
             .then(res => {
                 if (res.status === 201) {
-                    if (props.handleUpdate) {
-                        props.handleUpdate(res.data.data)
+                    if (handleUpdate) {
+                        handleUpdate(res.data.data)
                     }
                 }
             })
@@ -149,7 +164,7 @@ export default function ImageModal(props: { className?: string, handleUpdate?: a
     )
 
     return (
-        <div className={props.className}>
+        <div className={className}>
             <InputLabel
                 size='normal'
                 htmlFor="upload-image"

@@ -16,6 +16,7 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 const navigation = [
+  { name: 'Home Page', href: '/home' },
   { name: 'Products', href: '/products' },
   { name: 'Images', href: '/images' },
   { name: 'Marketplace', href: '#' },

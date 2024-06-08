@@ -20,8 +20,9 @@ const navigation = [
   { name: 'Home Page', href: '/home' },
   { name: 'Products', href: '/products' },
   { name: 'Images', href: '/images' },
-  { name: 'About', href: '#' },
-  { name: 'Policies', href: '#' },
+  { name: 'Orders', href: '/orders' },
+  { name: 'Team', href: '#' },
+  { name: 'Policies', href: 'policies' },
 ]
 
 export default function HeaderSection() {

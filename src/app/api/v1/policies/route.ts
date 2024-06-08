@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') || '1');
     const searchBy = req.nextUrl.searchParams.getAll('searchBy');
     const searchValue = req.nextUrl.searchParams.getAll('searchValue');
-    const orderBy = req.nextUrl.searchParams.get('orderBy') || 'updatedAt';
+    const orderBy = req.nextUrl.searchParams.get('orderBy') || 'suffix';
     const orderType = req.nextUrl.searchParams.get('orderType') || 'desc';
 
     const skip = (pageNumber - 1) * pageSize;
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (!data) {
-            return NotFoundResponse(null, "Products not found");
+            return NotFoundResponse(null, "Policies not found");
         }
 
         const lastPage = Math.ceil(total / pageSize);
@@ -75,15 +75,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request) {
     try {
-        const exist = await prisma.policy.count()
-
-        if (exist > 0) {
-            return ConflictResponse(null, "Only one policy is allowed");
-        }
-
         const { title, content, suffix } = await req.json();
        
-
         const data = await prisma.policy.create({
             data: {
                 title,

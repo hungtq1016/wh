@@ -4,6 +4,16 @@ const nextConfig = {
     images: {
         domains: ['tailwindui.com'],
     },
+    async redirects() {
+        return [
+            {
+                source: '/home',
+                destination: '/home/hero',
+                permanent: true,
+            },
+
+        ]
+    },
 };
 
 export default nextConfig;

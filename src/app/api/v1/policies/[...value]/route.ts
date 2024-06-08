@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
         }
 
         if (!data) {
-            return NotFoundResponse(null, "Product not found");
+            return NotFoundResponse(null, "Policy not found");
         }
 
         return SuccessResponse(data);

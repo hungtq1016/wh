@@ -7,13 +7,13 @@ const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFo
 
 export async function GET(req: Request) {
     try {
-        const users = await prisma.user.findMany();
+        const data = await prisma.user.findMany();
 
-        if (!users) {
+        if (!data) {
             return NotFoundResponse(null, "Users not found");
         }
 
-        return SuccessResponse(users);
+        return SuccessResponse(data);
     } catch (error) {
         return InternalServerErrorResponse(error);
     }
@@ -29,19 +29,19 @@ export async function POST(req: Request) {
             return FiledsErrorResponse(null, 400, fields);
         }
 
-        const user = await prisma.user.findUnique({
+        const data = await prisma.user.findUnique({
             where: {
                 email
             }
         });
 
-        if (user) {
+        if (data) {
             return ConflictResponse(null, "Email already exists");
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await prisma.user.create({
+        const newData = await prisma.user.create({
             data: {
                 email,
                 password: hashedPassword,
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
             }
         });
 
-        return CreatedResponse(newUser);
+        return CreatedResponse(newData);
 
     } catch (error) {
         return InternalServerErrorResponse(error);

@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
     try {
         const [type,value,...props] = params.value;
 
-        const { title, content, link, imageUrl, position } = await req.json();
+        const { title, content, link, position } = await req.json();
         
         let data = null;
 
@@ -50,7 +50,7 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
                         id: value
                     },
                     data: {
-                        title, content, link, imageUrl, position
+                        title, content, link, position
                     }
                 });
                 break;

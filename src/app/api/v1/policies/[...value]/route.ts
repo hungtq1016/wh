@@ -7,37 +7,12 @@ const { SuccessResponse, InternalServerErrorResponse, BadRequestResponse, NotFou
 export async function GET(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
         const [type, value, ...props] = params.value;
-
         let data = null;
-
         switch (type) {
             case 'id':
-                data = await prisma.product.findUnique({
+                data = await prisma.policy.findUnique({
                     where: {
                         id: value
-                    },
-                    include:{
-                        images:true
-                    }
-                });
-                break;
-            case 'slug':
-                data = await prisma.product.findUnique({
-                    where: {
-                        slug: value
-                    },
-                    include:{
-                        images:true
-                    }
-                });
-                break;
-            case 'sku':
-                data = await prisma.product.findUnique({
-                    where: {
-                        sku: value
-                    },
-                    include:{
-                        images:true
                     }
                 });
                 break;
@@ -60,28 +35,15 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
     try {
    
         const [type, value, ...props] = params.value;
-        const { name, slug, description, about, sku, salePrice, price, isSale, quantity, attributes, images } = await req.json();
-        
+        const { title, content, suffix } = await req.json();
         let data = null;
-
         switch (type) {
             case 'id':
-                data = await prisma.product.update({
+                data = await prisma.policy.update({
                     where: {
                         id: value
                     },
-                    data: {
-                        name,
-                        slug,
-                        description,
-                        about,
-                        sku,
-                        salePrice,
-                        price,
-                        isSale,
-                        quantity,
-                        attributes
-                    }
+                    data: {title, content, suffix}
                 });
                 break;
             default:
@@ -89,18 +51,7 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
         }
 
         if (!data) {
-            return NotFoundResponse(null, "Product not found");
-        }
-
-        if (images && images.length > 0) {
-            const updatePromises = images.map((image: any) => {
-                return prisma.image.update({
-                    where: { id: image.id },
-                    data: { ...image, productId: data.id }
-                });
-            });
-
-            await Promise.all(updatePromises);
+            return NotFoundResponse(null, "Policy not found");
         }
 
         return SuccessResponse(data);
@@ -117,7 +68,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { value: st
         let data = null;
         switch (type) {
             case 'id':
-                data = await prisma.product.delete({
+                data = await prisma.policy.delete({
                     where: {
                         id: value
                     }
@@ -128,7 +79,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { value: st
         }
 
         if (!data) {
-            return NotFoundResponse(null, "Product not found");
+            return NotFoundResponse(null, "Policy not found");
         }
 
         return SuccessResponse(data);

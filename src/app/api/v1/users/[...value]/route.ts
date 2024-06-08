@@ -7,20 +7,22 @@ const { SuccessResponse, InternalServerErrorResponse, BadRequestResponse, NotFou
 
 export async function GET(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
-        let user = null;
+        const [type, value, ...props] = params.value;
+
+        let data = null;
+
         switch(type){
             case 'id':
-                user = await prisma.user.findUnique({
+                data = await prisma.user.findUnique({
                     where: {
-                        id: data
+                        id: value
                     }
                 });
                 break;
             case 'email':
-                user = await prisma.user.findUnique({
+                data = await prisma.user.findUnique({
                     where: {
-                        email: data
+                        email: value
                     }
                 });
                 break;
@@ -28,11 +30,11 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                 return BadRequestResponse(null, "Invalid type");
         }
 
-        if (!user) {
+        if (!data) {
             return NotFoundResponse(null, "User not found");
         }
 
-        return SuccessResponse(user);
+        return SuccessResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -41,14 +43,14 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
 
 export async function PUT(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
+        const [type, value, ...props] = params.value;
         const { fullName, phoneNumber } = await req.json();
-        let user = null;
+        let data = null;
         switch(type){
             case 'id':
-                user = await prisma.user.update({
+                data = await prisma.user.update({
                     where: {
-                        id: data
+                        id: value
                     },
                     data: {
                         fullName,
@@ -60,11 +62,11 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
                 return BadRequestResponse(null, "Invalid ID");
         }
 
-        if (!user) {
+        if (!data) {
             return NotFoundResponse(null, "User not found");
         }
 
-        return SuccessResponse(user);
+        return SuccessResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -73,13 +75,13 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
 
 export async function DELETE(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
-        let user = null;
+        const [type, value, ...props] = params.value;
+        let data = null;
         switch(type){
             case 'id':
-                user = await prisma.user.delete({
+                data = await prisma.user.delete({
                     where: {
-                        id: data
+                        id: value
                     }
                 });
                 break;
@@ -87,11 +89,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { value: st
                 return BadRequestResponse(null, "Invalid ID");
         }
 
-        if (!user) {
+        if (!data) {
             return NotFoundResponse(null, "User not found");
         }
 
-        return SuccessResponse(user);
+        return SuccessResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);

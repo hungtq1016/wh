@@ -1,72 +1,54 @@
 import { prisma } from "@/libs/db";
 import ResponseHelper from '@/services/helpers/response.helper';
+import { pushFieldToFields } from '@/services/utils/string.util';
 import { NextRequest } from "next/server";
 
-const { SuccessResponse, InternalServerErrorResponse, NotFoundResponse, CreatedResponse } = ResponseHelper();
+const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFoundResponse, ConflictResponse, CreatedResponse } = ResponseHelper();
 
 export async function GET(req: NextRequest) {
-
     const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '10');
     const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') || '1');
     const searchBy = req.nextUrl.searchParams.getAll('searchBy');
     const searchValue = req.nextUrl.searchParams.getAll('searchValue');
     const orderBy = req.nextUrl.searchParams.get('orderBy') || 'updatedAt';
     const orderType = req.nextUrl.searchParams.get('orderType') || 'desc';
-    const filterBy = req.nextUrl.searchParams.getAll('filterBy') || [];
 
     const skip = (pageNumber - 1) * pageSize;
     const take = pageSize;
+
     try {
         let data = null;
         let total = 0;
-
-        const searchConditions = searchBy.length && searchValue.length
-            ? searchBy.map((field, index) => ({ [field]: { contains: searchValue[index] } }))
+        const searchConditions = searchBy.length && searchValue.length 
+            ? searchBy.map((field, index) => ({ [field]: { contains: searchValue[index] } })) 
             : [];
 
-
-        const filterByConditions = filterBy.length > 0 ? filterBy.map((field) => {
-            if (filterBy.length === 1) {
-                return { [field]: { not: null } }
-            }
-            return { [field]: null }
-        }) : [];
-
         if (searchConditions.length > 0) {
-
-            data = await prisma.image.findMany({
+            data = await prisma.policy.findMany({
                 skip,
                 take,
                 where: {
-                    AND: filterByConditions,
                     OR: searchConditions
                 },
                 orderBy: { [orderBy]: orderType }
+            
             });
-            total = await prisma.image.count({
+            total = await prisma.policy.count({
                 where: {
-                    AND: filterByConditions,
                     OR: searchConditions
                 }
             });
         } else {
-            data = await prisma.image.findMany({
-                where: {
-                    AND: filterByConditions
-                },
+            data = await prisma.policy.findMany({
                 skip,
                 take,
                 orderBy: { [orderBy]: orderType }
             });
-            total = await prisma.image.count({
-                where: {
-                    AND: filterByConditions
-                }
-            });
+            total = await prisma.policy.count();
         }
 
         if (!data) {
-            return NotFoundResponse(null, "Images not found");
+            return NotFoundResponse(null, "Products not found");
         }
 
         const lastPage = Math.ceil(total / pageSize);
@@ -84,23 +66,33 @@ export async function GET(req: NextRequest) {
             lastPage
         };
 
-        return SuccessResponse({data,metadata});
+        return SuccessResponse({ data, metadata });
     } catch (error) {
- 
         return InternalServerErrorResponse(error);
     }
 }
 
+
 export async function POST(req: Request) {
     try {
-        const images  = await req.json();
+        const exist = await prisma.policy.count()
 
-        const data = await prisma.image.createMany({
-            data: images,
-            skipDuplicates: true
+        if (exist > 0) {
+            return ConflictResponse(null, "Only one policy is allowed");
+        }
+
+        const { title, content, suffix } = await req.json();
+       
+
+        const data = await prisma.policy.create({
+            data: {
+                title,
+                content,
+                suffix
+            }
         });
 
-        return CreatedResponse(images);
+        return CreatedResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -109,10 +101,10 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
     try {
-        const { images } = await req.json();
+        const { policies } = await req.json();
 
-        const data = await prisma.image.updateMany({
-            data: images
+        const data = await prisma.policy.updateMany({
+            data: policies
         });
 
         return SuccessResponse(data);
@@ -124,9 +116,9 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
     try {
-        const { images } = await req.json();
+        const { policies } = await req.json();
 
-        const data = await prisma.image.deleteMany(images)
+        const data = await prisma.policy.deleteMany(policies)
 
         return SuccessResponse(data);
 

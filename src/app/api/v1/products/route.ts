@@ -90,7 +90,7 @@ export async function POST(req: Request) {
             return FiledsErrorResponse(null, 400, fields);
         }
 
-        const product = await prisma.product.create({
+        const data = await prisma.product.create({
             data: {
                 name,
                 slug,
@@ -109,13 +109,13 @@ export async function POST(req: Request) {
             const updatePromises = images.map((image: any) => {
                 return prisma.image.update({
                     where: { id: image.id },
-                    data: { ...image, productId: product.id }
+                    data: { ...image, productId: data.id }
                 });
             });
 
             await Promise.all(updatePromises);
         }
-        return CreatedResponse(product);
+        return CreatedResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -126,11 +126,11 @@ export async function PUT(req: Request) {
     try {
         const { products } = await req.json();
 
-        const response = await prisma.product.updateMany({
+        const data = await prisma.product.updateMany({
             data: products
         });
 
-        return SuccessResponse(response);
+        return SuccessResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -141,9 +141,9 @@ export async function DELETE(req: Request) {
     try {
         const { products } = await req.json();
 
-        const response = await prisma.product.deleteMany(products)
+        const data = await prisma.product.deleteMany(products)
 
-        return SuccessResponse(response);
+        return SuccessResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);

@@ -6,18 +6,18 @@ const { SuccessResponse, InternalServerErrorResponse, BadRequestResponse, NotFou
 
 export async function GET(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
-        let image = null;
+        const [type, value, ...props] = params.value;
+        let data = null;
         switch(type){
             case 'id':
-                image = await prisma.image.findUnique({
+                data = await prisma.image.findUnique({
                     where: {
-                        id: data
+                        id: value
                     }
                 });
                 break;
             case 'productId':
-                image = await prisma.image.findFirst({
+                data = await prisma.image.findFirst({
                     where: {
                         productId: data
                     }
@@ -27,11 +27,11 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                 return BadRequestResponse(null, "Invalid type");
         }
 
-        if (!image) {
+        if (!data) {
             return NotFoundResponse(null, "Image not found");
         }
 
-        return SuccessResponse(image);
+        return SuccessResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);
@@ -40,14 +40,14 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
 
 export async function PUT(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type, data, ...value] = params.value;
+        const [type, value, ...props] = params.value;
         const { alt } = await req.json();
-        let image = null;
+        let data = null;
         switch (type) {
             case 'id':
-                image = await prisma.image.update({
+                data = await prisma.image.update({
                     where: {
-                        id: data
+                        id: value
                     },
                     data: {
                         alt
@@ -58,11 +58,11 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
                 return BadRequestResponse(null, "Invalid ID");
         }
 
-        if (!image) {
+        if (!data) {
             return NotFoundResponse(null, "Image not found");
         }
 
-        return SuccessResponse(image);
+        return SuccessResponse(data);
 
     } catch (error) {
         console.log(error)
@@ -72,13 +72,13 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
 
 export async function DELETE(req: NextRequest, { params }: { params: { value: string[] } }) {
     try {
-        const [type,data,...value] = params.value;
-        let image = null;
+        const [type, value, ...props] = params.value;
+        let data = null;
         switch(type){
             case 'id':
-                image = await prisma.image.delete({
+                data = await prisma.image.delete({
                     where: {
-                        id: data
+                        id: value
                     }
                 });
                 break;
@@ -86,11 +86,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { value: st
                 return BadRequestResponse(null, "Invalid ID");
         }
 
-        if (!image) {
+        if (!data) {
             return NotFoundResponse(null, "Image not found");
         }
 
-        return SuccessResponse(image);
+        return SuccessResponse(data);
 
     } catch (error) {
         return InternalServerErrorResponse(error);

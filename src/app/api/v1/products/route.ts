@@ -31,7 +31,19 @@ export async function GET(req: NextRequest) {
                     OR: searchConditions
                 },
                 orderBy: { [orderBy]: orderType },
-                include: { _count: { select: { images: true } } }
+                
+                include: { 
+                    _count: { select: { images: true } },
+                    images : {
+                        select : {
+                            id: true,
+                            url: true,
+                            alt: true
+                        },
+                        take: 1,
+                        orderBy: { updatedAt: 'desc' }
+                    }
+                }
             });
             total = await prisma.product.count({
                 where: {
@@ -43,7 +55,18 @@ export async function GET(req: NextRequest) {
                 skip,
                 take,
                 orderBy: { [orderBy]: orderType },
-                include: { _count: { select: { images: true } } }
+                include: { 
+                    _count: { select: { images: true } },
+                    images : {
+                        select : {
+                            id: true,
+                            url: true,
+                            alt: true
+                        },
+                        take: 1,
+                        orderBy: { updatedAt: 'desc' }
+                    }
+                }
             });
             total = await prisma.product.count();
         }

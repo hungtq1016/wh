@@ -16,6 +16,13 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                     }
                 });
                 break;
+            case 'productId':
+                data = await prisma.review.findMany({
+                    where: {
+                        productId: value
+                    }
+                });
+                break;
             default:
                 return BadRequestResponse(null, "Invalid type");
         }

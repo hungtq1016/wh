@@ -125,16 +125,16 @@ export default function DataTable() {
       headerName: 'Images',
       sortable: false,
       renderCell: ({ row }: { row: any }) => {
-       return row.images && (
+        return row.images.map((image: any, index: number) => (
           <Image
-            key={row.images[0].id}
+            key={index}
             width={80}
             height={80}
-            src={row.images[0].url}
-            alt={row.images[0].alt}
+            src={image.url}
+            alt={image.alt}
             className='w-full h-40 object-cover rounded'
           />
-        )
+        ));
       }
     },
     {

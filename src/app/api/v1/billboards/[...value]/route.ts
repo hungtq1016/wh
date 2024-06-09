@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
     try {
         const [type,value,...props] = params.value;
 
-        const { title, content, link, position } = await req.json();
+        const { title, content, link, position, images } = await req.json();
         
         let data = null;
 
@@ -60,6 +60,17 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
 
         if (!data) {
             return NotFoundResponse(null, "Billboard not found");
+        }
+
+        if (images && images.length > 0) {
+            const updatePromises = images.map((image: any) => {
+                return prisma.image.update({
+                    where: { id: image.id },
+                    data: { ...image, billBoardId: data.id }
+                });
+            });
+
+            await Promise.all(updatePromises);
         }
 
         return SuccessResponse(data);

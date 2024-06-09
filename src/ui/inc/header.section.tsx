@@ -22,7 +22,7 @@ const navigation = [
   { name: 'Images', href: '/images' },
   { name: 'Orders', href: '/orders' },
   { name: 'Team', href: '#' },
-  { name: 'Policies', href: 'policies' },
+  { name: 'Policies', href: '/policies' },
 ]
 
 export default function HeaderSection() {

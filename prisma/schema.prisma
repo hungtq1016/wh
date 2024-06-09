@@ -122,7 +122,8 @@ model Order {
   district  String
   ward      String
   note      String
-  status    String
+  status    Int
+  payment   Int
   products  OrderOnProduct[]
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt

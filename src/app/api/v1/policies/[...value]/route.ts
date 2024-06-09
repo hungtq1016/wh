@@ -22,7 +22,7 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                         suffix: value
                     },
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'asc'
                     }
                 });
                 break;

@@ -42,7 +42,7 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
     try {
    
         const [type, value, ...props] = params.value;
-        const { name, productId, rating, content, upVote, downVote } = await req.json();
+        const { author, productId, rating, content, upVote, downVote, color } = await req.json();
         let data = null;
         switch (type) {
             case 'id':
@@ -51,8 +51,9 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
                         id: value
                     },
                     data: { 
-                        name, 
+                        author, 
                         productId, 
+                        color,
                         rating : Number(rating), 
                         content, 
                         upVote : Number(upVote), 

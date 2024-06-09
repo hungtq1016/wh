@@ -143,9 +143,10 @@ model OrderOnProduct {
 
 model Review {
   id        String   @id @default(uuid())
-  name      String
+  author      String
   product   Product  @relation(fields: [productId], references: [id])
   productId String
+  color     String
   rating    Int
   content   String
   upVote    Int

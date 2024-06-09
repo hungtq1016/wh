@@ -76,12 +76,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: Request) {
 
     try {
-        const { name, productId, rating, content, upVote, downVote } = await req.json();
+        const { author, productId, rating, color, content, upVote, downVote } = await req.json();
        
         const data = await prisma.review.create({
             data: { 
-                name, 
+                author, 
                 productId, 
+                color,
                 rating : Number(rating), 
                 content, 
                 upVote : Number(upVote), 

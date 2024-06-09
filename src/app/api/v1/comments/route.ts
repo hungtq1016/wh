@@ -1,9 +1,8 @@
 import { prisma } from "@/libs/db";
 import ResponseHelper from '@/services/helpers/response.helper';
-import { pushFieldToFields } from '@/services/utils/string.util';
 import { NextRequest } from "next/server";
 
-const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFoundResponse, ConflictResponse, CreatedResponse } = ResponseHelper();
+const { SuccessResponse, InternalServerErrorResponse, NotFoundResponse, CreatedResponse } = ResponseHelper();
 
 export async function GET(req: NextRequest) {
     const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '10');
@@ -93,6 +92,7 @@ export async function POST(req: Request) {
         return CreatedResponse(data);
 
     } catch (error) {
+        console.log(error);
         return InternalServerErrorResponse(error);
     }
 }

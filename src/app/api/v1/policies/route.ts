@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFoundResponse, ConflictResponse, CreatedResponse } = ResponseHelper();
 
 export async function GET(req: NextRequest) {
-    const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '10');
+    const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '40');
     const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') || '1');
     const searchBy = req.nextUrl.searchParams.getAll('searchBy');
     const searchValue = req.nextUrl.searchParams.getAll('searchValue');

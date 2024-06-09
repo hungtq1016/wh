@@ -20,6 +20,9 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                 data = await prisma.policy.findMany({
                     where: {
                         suffix: value
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
                     }
                 });
                 break;

@@ -16,6 +16,13 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                     }
                 });
                 break;
+            case 'suffix':
+                data = await prisma.policy.findMany({
+                    where: {
+                        suffix: value
+                    }
+                });
+                break;
             default:
                 return BadRequestResponse(null, "Invalid type");
         }

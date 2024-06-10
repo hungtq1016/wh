@@ -14,7 +14,7 @@ export const POST = async (req : NextRequest, res: NextResponse) => {
   }
 
   const buffer = Buffer.from(await (file as Blob).arrayBuffer());
-  const filename = '/uploads/'+Date.now() + (file as File).name.replaceAll(" ", "_");
+  const filename = '/'+Date.now() + (file as File).name.replaceAll(" ", "_");
 
   try {
     await writeFile(

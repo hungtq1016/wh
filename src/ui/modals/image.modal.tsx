@@ -85,7 +85,7 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
           console.log("Response: ", response);
           setImages(prevImages => {
             const updatedImages = [...prevImages];
-            updatedImages[index].url = response.data || '/test';
+            updatedImages[index].url = response.data.filename;
             return updatedImages;
           });
           return response;

@@ -1,17 +1,6 @@
 'use client'
 import { useState } from 'react';
-import {
-  Dialog,
-  DialogPanel,
-  Switch,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Transition,
-  TransitionChild
-} from '@headlessui/react';
+import { Dialog, DialogPanel, Switch, Tab, TabGroup, TabList, TabPanel, TabPanels, Transition, TransitionChild } from '@headlessui/react';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { InputLabel, TextField } from '@mui/material';
@@ -82,15 +71,11 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
           const formData = new FormData();
           formData.append('file', file);
           const response = await axios.post('/api/v1/images/upload', formData);
-          console.log("Response: ", response);
-          setImages(prevImages => {
-            const updatedImages = [...prevImages];
-            updatedImages[index].url = response.data.filename;
-            return updatedImages;
-          });
+          const img = images[index];
+          img.url = response.data.data;
+          setImages(prevImages => [...prevImages, img]);
           return response;
         });
-
         await Promise.all(uploadPromises);
         setFilesUpload([]);
       }

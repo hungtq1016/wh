@@ -14,11 +14,11 @@ export const POST = async (req : NextRequest, res: NextResponse) => {
   }
 
   const buffer = Buffer.from(await (file as Blob).arrayBuffer());
-  const filename = Date.now() + (file as File).name.replaceAll(" ", "_");
+  const filename = '/uploads/'+Date.now() + (file as File).name.replaceAll(" ", "_");
 
   try {
     await writeFile(
-      path.join(process.cwd(), "public/uploads/" + filename),
+      path.join(process.cwd(), "public" + filename),
       buffer
     );
     return CreatedResponse(filename, "File uploaded successfully");

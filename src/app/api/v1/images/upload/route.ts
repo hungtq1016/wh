@@ -24,6 +24,6 @@ export const POST = async (req : NextRequest, res: NextResponse) => {
     return CreatedResponse(filename, "File uploaded successfully");
   } catch (error) {
   
-    return InternalServerErrorResponse(null, "Error uploading file");
+    return InternalServerErrorResponse(error, "Error uploading file");
   }
 };

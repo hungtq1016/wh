@@ -14,11 +14,23 @@ export async function GET(req: NextRequest) {
         if (position) {
             data = await prisma.billBoard.findMany({ 
                 where: { position },
-                include: { images: true }
+                include: { 
+                    images: {
+                        select: {
+                            id: true
+                        }
+                    }
+                }
              });
         }else{
             data = await prisma.billBoard.findMany({
-                include: { images: true }
+                include: { 
+                    images: {
+                        select: {
+                            id: true
+                        }
+                    }
+                }
             });
         }
 

@@ -27,7 +27,7 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<IImage[]>([]);
   const [filesUpload, setFilesUpload] = useState<File[]>([]);
-  const [isBase64, setIsBase64] = useState(false);
+  const [isBase64, setIsBase64] = useState(true);
   const [uri, setUri] = useState('');
 
   const onImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,6 +211,7 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
                         <div className="border-t flex justify-between items-center p-3">
                           <div className='flex gap-2 items-center'>
                             <Switch
+                              disabled={true}
                               checked={isBase64}
                               onChange={() => setIsBase64(!isBase64)}
                               className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-red-600/30 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-green-600/30"

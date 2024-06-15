@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/libs/db";
 import ResponseHelper from "@/services/helpers/response.helper";
+import { del } from '@vercel/blob';
 
 const { SuccessResponse, InternalServerErrorResponse, BadRequestResponse, NotFoundResponse } = ResponseHelper();
 
@@ -81,6 +82,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { value: st
                         id: value
                     }
                 });
+                await del(data.url);
                 break;
             default:
                 return BadRequestResponse(null, "Invalid ID");

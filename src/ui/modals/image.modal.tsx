@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog, DialogPanel, Switch, Tab, TabGroup, TabList, TabPanel, TabPanels, Transition, TransitionChild } from '@headlessui/react';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -10,6 +10,7 @@ import { PlusIcon, TrashIcon, ArrowPathIcon } from '@heroicons/react/20/solid';
 import { toBase64Async, toBase64Image } from '@/services/utils/file.util';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import type { PutBlobResult } from '@vercel/blob';
 
 const categories = [
   { name: 'Local', icon: Laptop },
@@ -27,8 +28,10 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<IImage[]>([]);
   const [filesUpload, setFilesUpload] = useState<File[]>([]);
-  const [isBase64, setIsBase64] = useState(true);
+  const [isBase64, setIsBase64] = useState(false);
   const [uri, setUri] = useState('');
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
 
   const onImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!multiple) {
@@ -68,11 +71,10 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
     try {
       if (!isBase64) {
         const uploadPromises = filesUpload.map(async (file, index) => {
-          const formData = new FormData();
-          formData.append('file', file);
-          const response = await axios.post('/api/v1/images/upload', formData);
+
+          const response = await axios.post(`/api/v1/images/upload?filename=${file.name}`, file);
           const img = images[index];
-          img.url = response.data.data;
+          img.url = response.data.data.url;
           setImages(prevImages => [...prevImages, img]);
           return response;
         });
@@ -139,7 +141,14 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
           <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
           <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
         </div>
-        <input onChange={onImagesChange} multiple accept="image/*" id="dropzone-file" type="file" className="hidden" />
+        <input 
+        onChange={onImagesChange} 
+        ref={inputFileRef}
+        multiple 
+        accept="image/*" 
+        id="dropzone-file"
+        type="file" 
+        className="hidden" />
       </label>
     </div>
   );

@@ -1,29 +1,27 @@
-import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import { writeFile } from "fs/promises";
-import ResponseHelper from "@/services/helpers/response.helper";
+import ResponseHelper from '@/services/helpers/response.helper';
+import { put } from '@vercel/blob';
 
-const { BadRequestResponse, InternalServerErrorResponse, CreatedResponse } = ResponseHelper();
+const { InternalServerErrorResponse, CreatedResponse } = ResponseHelper();
 
-export const POST = async (req : NextRequest, res: NextResponse) => {
-  const formData = await req.formData();
-
-  const file = formData.get("file");
-  if (!file) {
-    return BadRequestResponse(null,"No file found");
-  }
-
-  const buffer = Buffer.from(await (file as Blob).arrayBuffer());
-  const filename = '/'+Date.now() + (file as File).name.replaceAll(" ", "_");
-
+export async function POST(request: Request) {
   try {
-    await writeFile(
-      path.join(process.cwd(), "public" + filename),
-      buffer
-    );
-    return CreatedResponse(filename, "File uploaded successfully");
+    const { searchParams } = new URL(request.url);
+
+    const fileName = searchParams.get('filename');
+    const randomName = Date.now().toString();
+
+    const nameOfFile = fileName || randomName;
+    let blob = null
+
+    if(request.body){
+      blob = await put(nameOfFile, request.body, {
+        access: 'public',
+      });
+    }
+    console.log(blob)
+    return CreatedResponse(blob,"File uploaded successfully");
   } catch (error) {
-  
-    return InternalServerErrorResponse(error, "Error uploading file");
+    console.log(error)
+    return InternalServerErrorResponse(error);
   }
-};
+}

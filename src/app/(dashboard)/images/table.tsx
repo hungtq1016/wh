@@ -34,8 +34,6 @@ function useHandleEdit({ row }: { row: any }) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios.put(`/api/v1/images/id/${row.id}`, row)
-      .then(() => { })
-      .catch((err) => )
       .finally(() => setOpen(!open))
   }
 

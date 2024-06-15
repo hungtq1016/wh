@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
 
         return SuccessResponse({data,metadata});
     } catch (error) {
- 
+        console.log(error)
         return InternalServerErrorResponse(error);
     }
 }

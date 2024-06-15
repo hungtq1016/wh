@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Dialog, DialogPanel, Switch, Tab, TabGroup, TabList, TabPanel, TabPanels, Transition, TransitionChild } from '@headlessui/react';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -10,7 +10,6 @@ import { PlusIcon, TrashIcon, ArrowPathIcon } from '@heroicons/react/20/solid';
 import { toBase64Async, toBase64Image } from '@/services/utils/file.util';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import type { PutBlobResult } from '@vercel/blob';
 
 const categories = [
   { name: 'Local', icon: Laptop },
@@ -30,8 +29,6 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
   const [filesUpload, setFilesUpload] = useState<File[]>([]);
   const [isBase64, setIsBase64] = useState(false);
   const [uri, setUri] = useState('');
-  const inputFileRef = useRef<HTMLInputElement>(null);
-  const [blob, setBlob] = useState<PutBlobResult | null>(null);
 
   const onImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!multiple) {
@@ -143,7 +140,6 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
         </div>
         <input 
         onChange={onImagesChange} 
-        ref={inputFileRef}
         multiple 
         accept="image/*" 
         id="dropzone-file"

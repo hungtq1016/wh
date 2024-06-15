@@ -22,12 +22,14 @@ export const pushFieldToFields = (fields: { [key: string]: string }) => {
 }
 
 export const slugify = (value: string) => {
-    return value
-        .toLowerCase() 
-        .trim() 
-        .replace(/[^a-z0-9 -]/g, '') 
-        .replace(/\s+/g, '-') 
-        .replace(/-+/g, '-'); 
+    return String(value)
+    .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+    .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+    .trim() // trim leading or trailing whitespace
+    .toLowerCase() // convert to lowercase
+    .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+    .replace(/\s+/g, '-') // replace spaces with hyphens
+    .replace(/-+/g, '-'); // remove consecutive hyphens
 }
 
 export const convertBigIntToString = (obj: any): any => {

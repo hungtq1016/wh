@@ -34,7 +34,7 @@ export default function DataTable() {
   const [update, setUpdate] = React.useState(false);
 
   React.useEffect(() => {
-    getData("/api/v1/billboards?position=home-about").then((data) => {
+    getData("/api/v1/billboards/position/home-about").then((data) => {
       setRows(data);
     });
   }, []);
@@ -124,11 +124,11 @@ export default function DataTable() {
       renderCell: ({ row }: { row: any }) => {
         return row.images && (
           <Image
-            key={row.images[0].id}
+            key={row?.images[0]?.id}
             width={80}
             height={80}
-            src={row.images[0].url}
-            alt={row.images[0].alt}
+            src={row?.images[0]?.url}
+            alt={row?.images[0]?.alt}
             className='w-full h-40 object-cover rounded'
           />
         )

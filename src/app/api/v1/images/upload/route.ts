@@ -18,10 +18,9 @@ export async function POST(request: Request) {
         access: 'public',
       });
     }
-    console.log(blob)
     return CreatedResponse(blob,"File uploaded successfully");
   } catch (error) {
-    console.log(error)
+    
     return InternalServerErrorResponse(error);
   }
 }

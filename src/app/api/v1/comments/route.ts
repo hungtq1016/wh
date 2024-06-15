@@ -92,7 +92,7 @@ export async function POST(req: Request) {
         return CreatedResponse(data);
 
     } catch (error) {
-        console.log(error);
+        ;
         return InternalServerErrorResponse(error);
     }
 }

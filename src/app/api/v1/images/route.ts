@@ -103,7 +103,7 @@ export async function POST(req: Request) {
         return CreatedResponse(images);
 
     } catch (error) {
-        console.log(error);
+        ;
         return InternalServerErrorResponse(error);
     }
 }

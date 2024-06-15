@@ -106,7 +106,7 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
         return SuccessResponse(data);
 
     } catch (error) {
-        console.log(error)
+        
         return InternalServerErrorResponse(error);
     }
 }

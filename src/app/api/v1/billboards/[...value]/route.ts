@@ -13,12 +13,36 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
         switch(type){
             case 'id':
                 data = await prisma.billBoard.findUnique({
+                    include:{
+                        images: {
+                            select: {
+                                id: true,
+                                url: true,
+                                alt: true
+                            }
+                        }
+                    },
                     where: {
                         id: value
                     }
                 });
                 break;
-
+            case 'position':
+                data = await prisma.billBoard.findMany({
+                    include:{
+                        images: {
+                            select: {
+                                id: true,
+                                url: true,
+                                alt: true
+                            }
+                        }
+                    },
+                    where: {
+                        position: value
+                    }
+                });
+                break;
             default:
                 return BadRequestResponse(null, "Invalid type");
         }

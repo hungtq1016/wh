@@ -35,7 +35,7 @@ function useHandleEdit({ row }: { row: any }) {
     e.preventDefault();
     axios.put(`/api/v1/images/id/${row.id}`, row)
       .then(() => { })
-      .catch((err) => console.log(err))
+      .catch((err) => )
       .finally(() => setOpen(!open))
   }
 

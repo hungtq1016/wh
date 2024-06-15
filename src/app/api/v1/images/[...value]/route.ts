@@ -66,7 +66,7 @@ export async function PUT(req: NextRequest, { params }: { params: { value: strin
         return SuccessResponse(data);
 
     } catch (error) {
-        console.log(error)
+        
         return InternalServerErrorResponse(error);
     }
 }
@@ -82,7 +82,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { value: st
                         id: value
                     }
                 });
-                await del(data.url);
+                if(data.url.includes("https://ooy4b0bespx7vwie.public.blob.vercel-storage.com/")){
+                    await del(data.url);
+                }
+                    
+
                 break;
             default:
                 return BadRequestResponse(null, "Invalid ID");

@@ -34,7 +34,7 @@ export default function DataTable() {
   const [update, setUpdate] = React.useState(false);
 
   React.useEffect(() => {
-    getData("/api/v1/billboards?position=home-frame").then((data) => {
+    getData("/api/v1/billboards/position/home-frame").then((data) => {
       setRows(data);
     });
   }, []);

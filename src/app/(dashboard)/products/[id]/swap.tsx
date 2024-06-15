@@ -2,8 +2,9 @@
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react"
 import ProductFrom from "./form"
+import ProductComment from "./comment"
 
-const categories = ['Detail','Comments','Variants']
+const categories = ['Detail','Comments']
 export default function Swap() {
     return (
         <TabGroup>
@@ -23,11 +24,8 @@ export default function Swap() {
                 <TabPanel >
                     <ProductFrom />
                 </TabPanel>
-
                 <TabPanel>
-
-                    
-
+                    <ProductComment/>
                 </TabPanel>
             </TabPanels>
         </TabGroup>

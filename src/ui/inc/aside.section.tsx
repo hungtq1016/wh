@@ -4,7 +4,7 @@ import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/re
 import { XMarkIcon, } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams, useParams } from 'next/navigation'
+import { usePathname, useParams } from 'next/navigation'
 import { useContext } from 'react'
 
 function classNames(...classes: string[]) {
@@ -123,16 +123,8 @@ export default function AsideSection() {
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-2 pb-4">
-          <div className="flex h-16 shrink-0 items-center">
-            <Image
-              width={32}
-              height={32}
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
-              alt="#"
-            />
-          </div>
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-2 py-4">
+
           <nav className="flex flex-1 flex-col" >
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>

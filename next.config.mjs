@@ -2,7 +2,7 @@
 const nextConfig = {
     //supported image formats
     images: {
-        domains: ['tailwindui.com','ooy4b0bespx7vwie.public.blob.vercel-storage.com'],
+        domains: ['tailwindui.com','ooy4b0bespx7vwie.public.blob.vercel-storage.com','images.unsplash.com'],
     },
     async redirects() {
         return [

@@ -20,15 +20,13 @@ export default function RootLayout({ children }: { children: Readonly<React.Reac
     <html lang="en">
       <body>
         <ReactQueryClientContext>
-          <div>
-            <AppRouterCacheProvider>
-              <AsideProvider>
-                <ClientProvider>
-                  {children}
-                </ClientProvider>
-              </AsideProvider>
-            </AppRouterCacheProvider>
-          </div>
+          <AppRouterCacheProvider>
+            <AsideProvider>
+              <ClientProvider>
+                {children}
+              </ClientProvider>
+            </AsideProvider>
+          </AppRouterCacheProvider>
         </ReactQueryClientContext>
       </body>
     </html>

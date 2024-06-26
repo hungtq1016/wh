@@ -7,34 +7,36 @@ import { AsideContext } from "./AsideContext";
 
 export default function ClientProvider({ children }: { children: React.ReactNode }) {
 
-  const { asideState } = useContext(AsideContext)
+    const { asideState } = useContext(AsideContext)
 
+    const paddingStyle = {
+        paddingLeft: asideState.navigation.length === 0 ? '0px' : '56px'
+    }
     return (
         <>
             <AsideSection />
-            <div className={
-                asideState.navigation.length === 0
-                ? 'lg:pl-0'
-                : 'lg:pl-14'
-            }>
+            <div className="flex flex-col min-h-screen"
+            style={paddingStyle}
+            >
                 <HeaderSection />
-                <main className="py-10">
+                <main className="py-14">
                     <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+
                 </main>
             </div>
             <ToastContainer
-          position="bottom-right"
-          autoClose={2500}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-          transition={Flip}
-        />
+                position="bottom-right"
+                autoClose={2500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Flip}
+            />
         </>
     )
 }

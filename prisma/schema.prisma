@@ -1,17 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Permission {
@@ -19,9 +13,9 @@ model Permission {
   name        String             @unique
   value       String
   description String
-  roles       PermissionOnRole[]
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+  roles       PermissionOnRole[]
 }
 
 model Role {
@@ -36,12 +30,12 @@ model Role {
 
 model PermissionOnRole {
   id           String     @id @default(uuid())
-  permission   Permission @relation(fields: [permissionId], references: [id])
   permissionId String
-  role         Role       @relation(fields: [roleId], references: [id])
   roleId       String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  role         Role       @relation(fields: [roleId], references: [id])
 }
 
 model User {
@@ -50,31 +44,31 @@ model User {
   email         String         @unique
   password      String
   phoneNumber   String
-  images        Image[]
-  roles         UserOnRole[]
-  refreshTokens RefreshToken[]
-  teams         TeamOnUser[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  images        Image[]
+  refreshTokens RefreshToken[]
+  teams         TeamOnUser[]
+  roles         UserOnRole[]
 }
 
 model UserOnRole {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
   userId    String
-  role      Role     @relation(fields: [roleId], references: [id])
   roleId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  role      Role     @relation(fields: [roleId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model RefreshToken {
   id        String   @id @default(uuid())
   token     String
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Product {
@@ -82,20 +76,20 @@ model Product {
   name           String           @unique
   slug           String           @unique
   description    String
-  about          String
   sku            String           @unique
   salePrice      String
   price          String
   isSale         Boolean
   quantity       Int
   attributes     Json
-  images         Image[]
-  orders         OrderOnProduct[]
-  reviews        Review[]
-  variants       ProductVariant[]
-  stockHistories StockHistory[]
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
+  about          String
+  images         Image[]
+  orders         OrderOnProduct[]
+  variants       ProductVariant[]
+  reviews        Review[]
+  stockHistories StockHistory[]
 }
 
 model Image {
@@ -104,74 +98,74 @@ model Image {
   alt         String
   productId   String?
   userId      String?
-  billBoardId String?
-  product     Product?   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  billBoards  BillBoard? @relation(fields: [billBoardId], references: [id], onDelete: Cascade)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  billBoardId String?
+  billBoards  BillBoard? @relation(fields: [billBoardId], references: [id], onDelete: Cascade)
+  product     Product?   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Order {
-  id        String           @id @default(uuid())
-  email     String
-  fullName  String
+  id          String           @id @default(uuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  address     String
+  city        String
+  district    String
+  email       String
+  fullName    String
+  note        String
   phoneNumber String
-  address   String
-  city      String
-  district  String
-  ward      String
-  note      String
-  status    Int
-  payment   Int
-  products  OrderOnProduct[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  ward        String
+  status      Int
+  payment     Int
+  products    OrderOnProduct[]
 }
 
 model OrderOnProduct {
   id        String   @id @default(uuid())
-  order     Order    @relation(fields: [orderId], references: [id])
   orderId   String
-  product   Product  @relation(fields: [productId], references: [id])
   productId String
   quantity  Int
   price     Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model Review {
   id        String   @id @default(uuid())
-  author      String
-  product   Product  @relation(fields: [productId], references: [id])
   productId String
-  color     String
   rating    Int
   content   String
-  upVote    Int
-  downVote  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  downVote  Int
+  upVote    Int
+  author    String
+  color     String
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model ProductVariant {
   id         String   @id @default(uuid())
   productId  String
-  product    Product  @relation(fields: [productId], references: [id])
   attributes Json
   price      Float
   sku        String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  product    Product  @relation(fields: [productId], references: [id])
 }
 
 model StockHistory {
   id        String   @id @default(uuid())
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
   change    Int
   createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model BillBoard {
@@ -179,36 +173,56 @@ model BillBoard {
   title     String
   content   String
   link      String
-  images    Image[]
   position  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  images    Image[]
 }
 
 model Policy {
   id        String   @id @default(uuid())
   title     String
   content   String
-  suffix    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  suffix    String
 }
 
 model Team {
   id        String       @id @default(uuid())
   name      String
-  members   TeamOnUser[]
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+  members   TeamOnUser[]
 }
 
 model TeamOnUser {
   id          String   @id @default(uuid())
-  team        Team     @relation(fields: [teamId], references: [id])
   teamId      String
-  user        User     @relation(fields: [userId], references: [id])
   userId      String
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  team        Team     @relation(fields: [teamId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Collection {
+  id          String                 @id @default(uuid())
+  content     String
+  title       String
+  dateTime    String
+  color       String
+  chapter     Int
+  image       String
+  exhibitions CollectionExhibition[]
+}
+
+model CollectionExhibition {
+  id           String     @id @default(uuid())
+  collectionId String
+  title        String
+  desccription String
+  image        String
+  collection   Collection @relation(fields: [collectionId], references: [id])
 }

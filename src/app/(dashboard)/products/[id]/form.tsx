@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Switch } from '@headlessui/react';
+import { useQuill } from 'react-quilljs';
 
 const initialState = {
   name: '',
@@ -92,7 +93,27 @@ export default function ProductFrom() {
 
   const [formState, formDispatch] = React.useReducer(formReducer, initialState);
   const [loading, setLoading] = React.useState(false);
-  
+  const { quill:descData, quillRef:descRef } = useQuill();
+  const { quill:aboutData, quillRef:aboutRef } = useQuill();
+
+  React.useEffect(() => {
+    if (descData) {
+      descData.on('text-change', (delta, oldDelta, source) => {
+          formDispatch({ type: 'CHANGE', field: 'description', value: descData.getText() })
+      });
+      descData.clipboard.dangerouslyPasteHTML(formState.description);
+    }
+  }, [descData]);
+
+  React.useEffect(() => {
+    if (aboutData) {
+      aboutData.on('text-change', (delta, oldDelta, source) => {
+          formDispatch({ type: 'CHANGE', field: 'about', value: aboutData.getText() })
+      });
+      aboutData.clipboard.dangerouslyPasteHTML(formState.about);
+    }
+  }, [aboutData]);
+
   React.useEffect(() => {
     getData("/api/v1/products/id/"+id).then((res) => {
       formDispatch({ type: 'UPDATE', data: res })
@@ -408,61 +429,19 @@ export default function ProductFrom() {
               <MenuItem value='pdf'>PDF</MenuItem>
             </Select>
           </div>
-          {/* <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
-            <InputLabel htmlFor='description' >Description</InputLabel>
-            <TextareaAutosize
-              className='w-full border border-gray-300 rounded p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-900'
-              minRows={16}
-              required
-              id="description"
-              placeholder='Product Description'
-              value={formState.description}
-              onChange={(e) => formDispatch({ type: 'CHANGE', field: 'description', value: e.target.value })}
-            />
-          </div> */}
+
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
             <InputLabel htmlFor='description'>Description</InputLabel>
-            <Editor
-              apiKey='djw4c7uq7gsbbh61pf3lb9ysv0rtt0rq159cg1mzs8xkarpy'
-              id='description'
-              init={{
-                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                tinycomments_mode: 'embedded',
-                tinycomments_author: 'Author name',
-                mergetags_list: [
-                  { value: 'First.Name', title: 'First Name' },
-                  { value: 'Email', title: 'Email' },
-                ],
-                ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-              }}
-              value={formState.description}
-              onEditorChange={(content, editor) => {
-                formDispatch({ type: 'CHANGE', field: 'description', value: content });
-              }}
-            />
+            <div style={{ height: 400 }}>
+              <div ref={descRef} />
+            </div>
+
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
             <InputLabel htmlFor='about'>About</InputLabel>
-            <Editor
-              apiKey='djw4c7uq7gsbbh61pf3lb9ysv0rtt0rq159cg1mzs8xkarpy'
-              id='about'
-              init={{
-                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                tinycomments_mode: 'embedded',
-                tinycomments_author: 'Author name',
-                mergetags_list: [
-                  { value: 'First.Name', title: 'First Name' },
-                  { value: 'Email', title: 'Email' },
-                ],
-                ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-              }}
-              value={formState.about}
-              onEditorChange={(content, editor) => {
-                formDispatch({ type: 'CHANGE', field: 'about', value: content });
-              }}
-            />
+            <div style={{ height: 400 }}>
+              <div ref={aboutRef} />
+            </div>
           </div>
         </div>
         <div className='flex justify-end mt-5 gap-2'>

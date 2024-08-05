@@ -151,7 +151,7 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
 
   return (
     <div className={className}>
-      <InputLabel size="normal" htmlFor="upload-image">Upload image</InputLabel>
+      <InputLabel size="normal" htmlFor="upload-image">Tải lên hình ảnh</InputLabel>
       <Button
         onClick={() => setIsOpen(true)}
         component="label"
@@ -161,7 +161,7 @@ export default function ImageModal({ multiple = true, className, handleUpdate }:
         tabIndex={-1}
         startIcon={<CloudUploadIcon />}
       >
-        Upload image
+        Tải lên hình ảnh
       </Button>
       <Transition appear show={isOpen}>
         <Dialog as="div" className="relative z-10 focus:outline-none" onClose={() => setIsOpen(false)}>

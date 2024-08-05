@@ -211,10 +211,13 @@ model Collection {
   id          String                 @id @default(uuid())
   content     String
   title       String
+  desc        String
   dateTime    String
   color       String
-  chapter     Int
+  chapter     Int @unique
   image       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   exhibitions CollectionExhibition[]
 }
 
@@ -224,5 +227,7 @@ model CollectionExhibition {
   title        String
   desccription String
   image        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   collection   Collection @relation(fields: [collectionId], references: [id])
 }

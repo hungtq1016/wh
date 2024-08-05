@@ -6,7 +6,7 @@ export default function AddPolicyPage(){
         <div>
             <Heading>
                 <Heading.Title className="mb-1">Create Policy</Heading.Title>
-                <Heading.Desc>Add new policy</Heading.Desc>
+                <Heading.Desc>Thêm Mới policy</Heading.Desc>
             </Heading>
             <PolicyFrom />
         </div>

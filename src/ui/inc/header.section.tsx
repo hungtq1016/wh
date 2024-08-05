@@ -16,13 +16,14 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 const navigation = [
-  { name: 'Dashboard', href: '/' },
-  { name: 'Home Page', href: '/home' },
-  { name: 'Products', href: '/products' },
-  { name: 'Images', href: '/images' },
-  { name: 'Orders', href: '/orders' },
-  { name: 'Team', href: '#' },
-  { name: 'Policies', href: '/policies' },
+  { name: 'Trang Quản Lý', href: '/' },
+  { name: 'Quản lý trang chủ', href: '/home' },
+  { name: 'Bộ sưu tập', href: '/collections' },
+  { name: 'Sản Phẩm', href: '/products' },
+  { name: 'Hình Ảnh', href: '/images' },
+  { name: 'Hóa Đơn', href: '/orders' },
+  { name: 'Nhóm', href: '#' },
+  { name: 'Quyền Lợi', href: '/policies' },
 ]
 
 export default function HeaderSection() {

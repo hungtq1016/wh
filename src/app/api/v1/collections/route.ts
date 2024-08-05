@@ -1,11 +1,12 @@
 import { prisma } from "@/libs/db";
 import ResponseHelper from '@/services/helpers/response.helper';
+import { pushFieldToFields } from '@/services/utils/string.util';
 import { NextRequest } from "next/server";
 
-const { SuccessResponse, InternalServerErrorResponse, NotFoundResponse, CreatedResponse } = ResponseHelper();
+const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFoundResponse, ConflictResponse, CreatedResponse } = ResponseHelper();
 
 export async function GET(req: NextRequest) {
-    const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '5');
+    const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '10');
     const pageNumber = parseInt(req.nextUrl.searchParams.get('pageNumber') || '1');
     const searchBy = req.nextUrl.searchParams.getAll('searchBy');
     const searchValue = req.nextUrl.searchParams.getAll('searchValue');
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest) {
             : [];
 
         if (searchConditions.length > 0) {
-            data = await prisma.billBoard.findMany({
+            data = await prisma.collection.findMany({
                 skip,
                 take,
                 where: {
@@ -31,38 +32,23 @@ export async function GET(req: NextRequest) {
                 },
                 orderBy: { [orderBy]: orderType },
                 
-                include: { 
-                    _count: { select: { images: true } },
-                    images : {
-                        select : {
-                            id: true,
-                            url: true,
-                            alt: true
-                        },
-                        take: 1,
-                        orderBy: { updatedAt: 'desc' }
-                    }
-                }
             });
-            total = await prisma.billBoard.count({
+            total = await prisma.collection.count({
                 where: {
                     OR: searchConditions
                 }
             });
         } else {
-            data = await prisma.billBoard.findMany({
+            data = await prisma.collection.findMany({
                 skip,
                 take,
                 orderBy: { [orderBy]: orderType },
-                include: { 
-                    _count: { select: { images: true } },
-                }
             });
-            total = await prisma.billBoard.count();
+            total = await prisma.collection.count();
         }
 
         if (!data) {
-            return NotFoundResponse(null, "Billboards not found");
+            return NotFoundResponse(null, "Collections not found");
         }
 
         const lastPage = Math.ceil(total / pageSize);
@@ -82,30 +68,35 @@ export async function GET(req: NextRequest) {
 
         return SuccessResponse({ data, metadata });
     } catch (error) {
+        console.log(error)
         return InternalServerErrorResponse(error);
     }
 }
 
+
 export async function POST(req: Request) {
     try {
-        const { id, title, content, link, position, images } = await req.json();
-        
-        const data = await prisma.billBoard.create({
+
+        const { chapter, color, content, exhibitions, title, dateTime, image, description } = await req.json();
+       
+        const fields = pushFieldToFields({ chapter, color, content, exhibitions, title, dateTime, image, description });
+
+        if (!fields) {
+            return FiledsErrorResponse(null, 400, fields);
+        }
+
+        const data = await prisma.collection.create({
             data: {
-                id, title, content, link, position
+                chapter : Number(chapter),
+                color,
+                content,
+                exhibitions,
+                title,
+                dateTime,
+                image,
+                desc:description
             }
         });
-
-        if (images && images.length > 0) {
-            const updatePromises = images.map((image: any) => {
-                return prisma.image.update({
-                    where: { id: image.id },
-                    data: { ...image, billBoardId: data.id }
-                });
-            });
-
-            await Promise.all(updatePromises);
-        }
 
         return CreatedResponse(data);
 
@@ -116,10 +107,10 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
     try {
-        const { billboards } = await req.json();
+        const { collections } = await req.json();
 
-        const data = await prisma.billBoard.updateMany({
-            data: billboards
+        const data = await prisma.collection.updateMany({
+            data: collections
         });
 
         return SuccessResponse(data);
@@ -131,9 +122,9 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
     try {
-        const { billboards } = await req.json();
+        const { collections } = await req.json();
 
-        const data = await prisma.billBoard.deleteMany(billboards)
+        const data = await prisma.collection.deleteMany(collections)
 
         return SuccessResponse(data);
 

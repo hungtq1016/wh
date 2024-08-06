@@ -161,39 +161,39 @@ export default function ProductFrom() {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+       <form onSubmit={onSubmit}>
         <div className='grid grid-cols-12 gap-3 mt-5'>
           <div className='col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 space-y-2'>
-            <InputLabel htmlFor="name">Name</InputLabel>
+            <InputLabel htmlFor="name">Tên Sách</InputLabel>
             <TextField
               className='w-full'
               size='small'
               id="name"
               required
-              placeholder='Product Name'
+              placeholder='Tên Sách...'
               value={formState.name}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'name', value: e.target.value })}
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 space-y-2'>
-            <InputLabel htmlFor="name">Slug</InputLabel>
+            <InputLabel htmlFor="slug">Đường Dẫn</InputLabel>
             <TextField
               className='w-full bg-gray-200 text-gray-600 rounded'
               size='small'
               id="slug"
-              placeholder='product-name'
+              placeholder='ten-sach'
               value={formState.slug}
               disabled
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 space-y-2'>
-            <InputLabel htmlFor="sku">SKU</InputLabel>
+            <InputLabel htmlFor="sku">Mã SKU</InputLabel>
             <TextField
               className='w-full'
               size='small'
               id="sku"
               required
-              placeholder='Product SKU'
+              placeholder='Mã SKU...'
               value={formState.sku}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'sku', value: e.target.value })}
             />
@@ -201,7 +201,7 @@ export default function ProductFrom() {
           {
             formState.images.length > 0 ?
               <div className='col-span-12 space-y-2'>
-                <InputLabel>Images</InputLabel>
+                <InputLabel>Hình Ảnh</InputLabel>
                 <div className='flex flex-wrap gap-3'>
                   {
                     formState.images.map((image: any, index: number) => (
@@ -226,28 +226,28 @@ export default function ProductFrom() {
 
               :
               <ImageModal
-                  multiple={true}
-                  handleUpdate={onImageUpdate}
-                  className='col-span-12 space-y-2' />
+                multiple={true}
+                handleUpdate={onImageUpdate}
+                className='col-span-12 space-y-2' />
           }
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="price">Price</InputLabel>
+            <InputLabel htmlFor="price">Giá</InputLabel>
             <TextField
               className='w-full'
               InputProps={{
-                endAdornment:<InputAdornment position="end">đ</InputAdornment>
+                endAdornment: <InputAdornment position="end">đ</InputAdornment>
               }}
               size='small'
               id="price"
               type='number'
               required
-              placeholder='Price of Product'
+              placeholder='Giá Của Sách...'
               value={formState.price}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'price', value: e.target.value })}
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="sale">Sale Price</InputLabel>
+            <InputLabel htmlFor="sale">Giảm Giá</InputLabel>
             <TextField
               className='w-full'
               size='small'
@@ -255,15 +255,15 @@ export default function ProductFrom() {
               type='number'
               required
               InputProps={{
-                endAdornment:<InputAdornment position="end">đ</InputAdornment>
+                endAdornment: <InputAdornment position="end">đ</InputAdornment>
               }}
-              placeholder='Price of Product on Sale'
+              placeholder='Giảm Giá...'
               value={formState.salePrice}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'salePrice', value: e.target.value })}
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="quantity">Quantity</InputLabel>
+            <InputLabel htmlFor="quantity">Số Lượng</InputLabel>
             <TextField
               className='w-full'
               size='small'
@@ -271,75 +271,56 @@ export default function ProductFrom() {
               id="quantity"
               required
               InputProps={{
-                endAdornment:<InputAdornment position="end">item{formState.quantity>1 && <span>s</span>}</InputAdornment>
+                endAdornment: <InputAdornment position="end">item{formState.quantity > 1 && <span>s</span>}</InputAdornment>
               }}
-              placeholder='Quantity of Product in Stock'
+              placeholder='Số Lượng Trong Giỏ Hàng...'
               value={formState.quantity}
               onChange={(e) => formDispatch({ type: 'CHANGE', field: 'quantity', value: e.target.value })}
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor='discount'>Discount</InputLabel>
+            <InputLabel htmlFor='discount'>Giảm Giá?</InputLabel>
             <div className="flex gap-2 items-center">
-              <div className="basis-14">
-              <Switch
+              <Checkbox
+                id='discount'
                 checked={formState.isSale}
-                onChange={(e) => formDispatch({ type: 'CHANGE', field: 'isSale', value: e })}
-                className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-red-600/10 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-green-600/10"
-              >
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7"
-                />
-              </Switch>
-              </div>
-              <span>This product will sale with discount price!</span>
+                onChange={(e) => formDispatch({ type: 'CHANGE', field: 'isSale', value: e.target.checked })}
+              />
+              <span>Sách sẽ được giảm giá khi chọn!</span>
             </div>
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor='freeship'>Free shipping</InputLabel>
+            <InputLabel htmlFor='freeship'>Miễn Phí Giao Hàng?</InputLabel>
             <div className="flex gap-2 items-center">
-              <div className="basis-14">
-                <Switch
-                  checked={formState.attributes.find((attr: any) => attr.k === 'free-shipping')?.v || false}
-                  onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'free-shipping', value: e })}
-                  className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-red-600/10 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-green-600/10"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7"
-                  />
-                </Switch>
-              </div>
-              <span>The free shipping program will be applied!</span>
+              <Checkbox
+                id='freeship'
+                checked={formState.attributes.find((attr: any) => attr.k === 'free-shipping')?.v || ''}
+                onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'free-shipping', value: e.target.value })}
+
+              />
+              <span>Sách sẽ được miễn phí giao hàng!</span>
             </div>
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor='Refund'>Refund</InputLabel>
+            <InputLabel htmlFor='Refund'>Cho Phép Trả Hàng?</InputLabel>
             <div className="flex gap-2 items-center">
-              <div className="basis-14">
-                <Switch
-                  checked={formState.attributes.find((attr: any) => attr.k === 'refund')?.v || false}
-                  onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'refund', value: e })}
-                  className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-red-600/10 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-green-600/10"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7"
-                  />
-                </Switch>
-              </div>
-              <span>This product will be eligible for refund!</span>
+              <Checkbox
+                id='Refund'
+                checked={formState.attributes.find((attr: any) => attr.k === 'refund')?.v || ''}
+                onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'refund', value: e.target.value })}
+
+              />
+              <span>Sách sẽ được hoàn trả!</span>
             </div>
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="page-length">Page Length</InputLabel>
+            <InputLabel htmlFor="page-length">Số Lượng Trang</InputLabel>
             <TextField
               className='w-full'
               size='small'
               required
               InputProps={{
-                endAdornment:<InputAdornment position="end">pages</InputAdornment>
+                endAdornment: <InputAdornment position="end">trang</InputAdornment>
               }}
               id="page-length"
               type='number'
@@ -349,7 +330,7 @@ export default function ProductFrom() {
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="width">Width</InputLabel>
+            <InputLabel htmlFor="width">Rộng</InputLabel>
             <TextField
               className='w-full'
               size='small'
@@ -357,7 +338,7 @@ export default function ProductFrom() {
               required
               type='number'
               InputProps={{
-                endAdornment:<InputAdornment position="end">cm</InputAdornment>
+                endAdornment: <InputAdornment position="end">cm</InputAdornment>
               }}
               placeholder='Width of Product'
               value={formState.attributes.find((attr: any) => attr.k === 'width')?.v || ''}
@@ -365,7 +346,7 @@ export default function ProductFrom() {
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="length">Length</InputLabel>
+            <InputLabel htmlFor="length">Dày</InputLabel>
             <TextField
               className='w-full'
               size='small'
@@ -373,7 +354,7 @@ export default function ProductFrom() {
               id="length"
               type='number'
               InputProps={{
-                endAdornment:<InputAdornment position="end">cm</InputAdornment>
+                endAdornment: <InputAdornment position="end">cm</InputAdornment>
               }}
               placeholder='Length of Product'
               value={formState.attributes.find((attr: any) => attr.k === 'length')?.v || ''}
@@ -381,7 +362,7 @@ export default function ProductFrom() {
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="height">Height</InputLabel>
+            <InputLabel htmlFor="height">Dài</InputLabel>
             <TextField
               className='w-full'
               size='small'
@@ -389,7 +370,7 @@ export default function ProductFrom() {
               id="height"
               type='number'
               InputProps={{
-                endAdornment:<InputAdornment position="end">cm</InputAdornment>
+                endAdornment: <InputAdornment position="end">cm</InputAdornment>
               }}
               placeholder='Height of Product'
               value={formState.attributes.find((attr: any) => attr.k === 'height')?.v || ''}
@@ -397,7 +378,7 @@ export default function ProductFrom() {
             />
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="language">Language</InputLabel>
+            <InputLabel htmlFor="language">Ngôn Ngữ</InputLabel>
             <Select
               className='w-full'
               size='small'
@@ -413,7 +394,7 @@ export default function ProductFrom() {
             </Select>
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-2 space-y-2'>
-            <InputLabel htmlFor="cover">Cover</InputLabel>
+            <InputLabel htmlFor="cover">Bìa</InputLabel>
             <Select
               className='w-full'
               size='small'
@@ -422,33 +403,32 @@ export default function ProductFrom() {
               onChange={(e) => formDispatch({ type: 'CHANGE_ATTRIBUTE', field: 'cover', value: e.target.value })}
             >
               <MenuItem value="">
-                <em>None</em>
+                <em>Không Chọn</em>
               </MenuItem>
-              <MenuItem value='hard-cover'>Hard Cover</MenuItem>
-              <MenuItem value='soft-cover'>Soft Cover</MenuItem>
-              <MenuItem value='pdf'>PDF</MenuItem>
+              <MenuItem value='hard-cover'>Bìa Cứng</MenuItem>
+              <MenuItem value='soft-cover'>Bìa Mềm</MenuItem>
+              <MenuItem value='pdf'>Bản PDF</MenuItem>
             </Select>
           </div>
-
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
-            <InputLabel htmlFor='description'>Description</InputLabel>
-            <div style={{ height: 400 }}>
+            <InputLabel htmlFor='description'>Chi Tiết</InputLabel>
+            <div style={{ height: 300 }}>
               <div ref={descRef} />
             </div>
 
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
-            <InputLabel htmlFor='about'>About</InputLabel>
-            <div style={{ height: 400 }}>
+            <InputLabel htmlFor='about'>Thông Tin</InputLabel>
+            <div style={{ height: 300 }}>
               <div ref={aboutRef} />
             </div>
           </div>
         </div>
         <div className='flex justify-end mt-5 gap-2'>
           <Link href='/products'>
-            <Button type='button' variant="text">Cancel</Button>
+            <Button type='button' variant="text">Trở Về</Button>
           </Link>
-          <Button disabled={loading} type='submit' variant="contained">Submit</Button>
+          <Button disabled={loading} type='submit' variant="contained">Xác Nhận</Button>
         </div>
       </form>
       {

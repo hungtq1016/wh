@@ -80,7 +80,7 @@ export default function PolicyFrom() {
       <form onSubmit={onSubmit}>
         <div className='grid grid-cols-12 gap-3 mt-5'>
           <div className='col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 space-y-2'>
-            <InputLabel htmlFor="title">Title</InputLabel>
+            <InputLabel htmlFor="title">Tiêu Đề</InputLabel>
             <TextField
               className='w-full'
               size='small'
@@ -108,7 +108,7 @@ export default function PolicyFrom() {
             </Select>
           </div>
           <div className='col-span-12 space-y-2'>
-            <InputLabel htmlFor='content'>Content</InputLabel>
+            <InputLabel htmlFor='content'>Nội Dung Hiển Thị</InputLabel>
             <Editor
               apiKey='djw4c7uq7gsbbh61pf3lb9ysv0rtt0rq159cg1mzs8xkarpy'
               id='content'
@@ -132,9 +132,9 @@ export default function PolicyFrom() {
         </div>
         <div className='flex justify-end mt-5 gap-2'>
           <Link href='/policies'>
-            <Button type='button' variant="text">Cancel</Button>
+            <Button type='button' variant="text">Trở Về</Button>
           </Link>
-          <Button disabled={loading} type='submit' variant="contained">Submit</Button>
+          <Button disabled={loading} type='submit' variant="contained">Xác Nhận</Button>
         </div>
       </form>
       {

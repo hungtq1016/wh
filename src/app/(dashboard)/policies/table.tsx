@@ -24,8 +24,8 @@ export default function DataTable() {
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'title', headerName: 'Title',  },
-    { field: 'content', headerName: 'Content', width: 230 },
+    { field: 'title', headerName: 'Tiêu Đề',  },
+    { field: 'content', headerName: 'Nội Dung', width: 230 },
     { field: 'suffix', headerName: 'suffix', width: 90, },
     {
       field: "action",
@@ -60,7 +60,7 @@ export default function DataTable() {
               onClick={copyToClipboard}> Copy </MenuItem>
               <MenuItem 
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-              onClick={handleDelete}>Delete</MenuItem>
+              onClick={handleDelete}>Xóa</MenuItem>
             </Menu>
           </Dropdown>
         );
@@ -75,7 +75,7 @@ export default function DataTable() {
                 className='w-full'
                 id="outlined-required"
                 label="Search"
-                placeholder='Search...'
+                placeholder='Tìm Kiếm...'
             />
         </div>    
         <DataGrid

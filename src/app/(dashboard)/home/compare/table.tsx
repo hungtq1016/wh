@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import Image from 'next/image';
 import ImageModal from '@/ui/modals/image.modal';
 import { v4 } from 'uuid';
+import { useQuill } from 'react-quilljs';
 
 const getData = async (route: string) => {
   const response = await axios.get(route);
@@ -32,6 +33,14 @@ export default function DataTable() {
   const [formState, setFormState] = React.useState({...initialState});
   const [loading, setLoading] = React.useState(false);
   const [update, setUpdate] = React.useState(false);
+  const { quill, quillRef } = useQuill();
+
+  React.useEffect(() => {
+    if (quill) {
+      quill.on('text-change', (delta, oldDelta, source) => handleChange('content', quill.getSemanticHTML()))
+      quill.clipboard.dangerouslyPasteHTML(formState.content);
+    }
+  }, [quill]);
 
   React.useEffect(() => {
     getData("/api/v1/billboards/position/home-compare").then((data) => {
@@ -117,12 +126,12 @@ export default function DataTable() {
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'title', headerName: 'Title', width: 130 },
-    { field: 'link', headerName: 'Link', width: 130 },
-    { field: 'content', headerName: 'Content', sortable: false },
+    { field: 'title', headerName: 'Tiêu Đề', width: 130 },
+    { field: 'link', headerName: 'Đường Dẫn', width: 130 },
+    { field: 'content', headerName: 'Nội Dung', sortable: false },
     {
       field: 'images',
-      headerName: 'Images',
+      headerName: 'Hình Ảnh',
       sortable: false,
       renderCell: ({ row }: { row: any }) => {
         return row.images.map((image: any, index: number) => (
@@ -144,9 +153,9 @@ export default function DataTable() {
         <Dropdown className="relative inline-block text-left">
           <MenuButton className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Action</MenuButton>
           <Menu className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-            <MenuItem className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={() => onRowClick(row)}>Update</MenuItem>
+            <MenuItem className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={() => onRowClick(row)}>Cập Nhật</MenuItem>
             <MenuItem className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={() => navigator.clipboard.writeText(row.id)}>Copy</MenuItem>
-            <MenuItem className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={() => handleDelete(row.id)}>Delete</MenuItem>
+            <MenuItem className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={() => handleDelete(row.id)}>Xóa</MenuItem>
           </Menu>
         </Dropdown>
       )
@@ -159,25 +168,25 @@ export default function DataTable() {
         <form onSubmit={handleSubmit}>
           <div className='grid grid-cols-12 gap-3 mt-5'>
             <div className='col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 space-y-2'>
-              <InputLabel htmlFor="title">Title</InputLabel>
+              <InputLabel htmlFor="title">Tiêu Đề</InputLabel>
               <TextField
                 className='w-full'
                 size='small'
                 id="title"
                 required
-                placeholder='Title'
+                placeholder='Tiêu Đề...'
                 value={formState.title}
                 onChange={(e) => handleChange('title', e.target.value)}
               />
             </div>
             <div className='col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 space-y-2'>
-              <InputLabel htmlFor="link">Link</InputLabel>
+              <InputLabel htmlFor="link">Đường Dẫn</InputLabel>
               <TextField
                 className='w-full'
                 size='small'
                 id="link"
                 required
-                placeholder='Link'
+                placeholder='Đường Dẫn...'
                 value={formState.link}
                 onChange={(e) => handleChange('link', e.target.value)}
               />
@@ -185,7 +194,7 @@ export default function DataTable() {
             {
               formState.images.length > 0 ?
                 <div className='col-span-12 space-y-2'>
-                  <InputLabel>Images</InputLabel>
+                  <InputLabel>Hình Ảnh</InputLabel>
                   <div className='flex flex-wrap gap-3'>
                     {
                       formState.images.map((image, index) => (
@@ -216,28 +225,14 @@ export default function DataTable() {
                 />
             }
             <div className='col-span-12 space-y-2'>
-              <InputLabel htmlFor='content'>Content</InputLabel>
-              <Editor
-                apiKey='djw4c7uq7gsbbh61pf3lb9ysv0rtt0rq159cg1mzs8xkarpy'
-                id='content'
-                init={{
-                  plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                  tinycomments_mode: 'embedded',
-                  tinycomments_author: 'Author name',
-                  mergetags_list: [
-                    { value: 'First.Name', title: 'First Name' },
-                    { value: 'Email', title: 'Email' },
-                  ],
-                  ai_request: (request:any, respondWith:any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                }}
-                value={formState.content}
-                onEditorChange={(content) => handleChange('content', content)}
-              />
+              <InputLabel htmlFor='content'>Nội Dung Hiển Thị</InputLabel>
+              <div style={{ height: 300 }}>
+              <div ref={quillRef} />
+            </div>
             </div>
           </div>
           <div className='flex justify-end mt-5 gap-2'>
-            <Button disabled={loading} type='submit' variant="contained">Submit</Button>
+            <Button disabled={loading} type='submit' variant="contained">Xác Nhận</Button>
           </div>
         </form>
       </div>
@@ -247,7 +242,7 @@ export default function DataTable() {
             className='w-full'
             id="outlined-required"
             label="Search"
-            placeholder='Search...'
+            placeholder='Tìm Kiếm...'
           />
         </div>
         <DataGrid

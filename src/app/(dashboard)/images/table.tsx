@@ -51,7 +51,7 @@ function useHandleEdit({ row }: { row: any }) {
                 row.alt = e.target.value; // Update the row's alt value
               }}
             />
-            <div className='text-xs mt-0'>escape to <span className='font-semibold text-blue-600'>cancel</span> • enter to <span className='font-semibold text-blue-600'>save</span></div>
+            <div className='text-xs mt-0'>escape to <span className='font-semibold text-blue-600'>Trở Về</span> • enter to <span className='font-semibold text-blue-600'>save</span></div>
           </div>
           <input type="submit" className='hidden' />
         </form>
@@ -113,7 +113,7 @@ export default function DataTable({ query, route }: { query?: any, route?: strin
           case 'products':
             return <Link
               href={`/${route}/${row.productId}`}
-              className='text-blue-600'>Link</Link>;
+              className='text-blue-600'>Đường Dẫn</Link>;
           default:
             return 'Unknown';
         }
@@ -160,7 +160,7 @@ export default function DataTable({ query, route }: { query?: any, route?: strin
                 onClick={() => copyToClipBoard(row.url)}> Copy url </MenuItem>
               <MenuItem
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                onClick={handleDelete}>Delete</MenuItem>
+                onClick={handleDelete}>Xóa</MenuItem>
             </Menu>
           </Dropdown>
         );
@@ -176,7 +176,7 @@ export default function DataTable({ query, route }: { query?: any, route?: strin
             className='w-full'
             id="outlined-required"
             label="Search"
-            placeholder='Search...'
+            placeholder='Tìm Kiếm...'
           />
         </div>
         <DataGrid

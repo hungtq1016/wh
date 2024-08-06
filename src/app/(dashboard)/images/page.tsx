@@ -10,10 +10,10 @@ export default function ImagesPage(){
         <div className="flex flex-col gap-32">
             <div>
                 <Heading>
-                    <Heading.Title className="mb-1">Images</Heading.Title>
+                    <Heading.Title className="mb-1">Hình Ảnh</Heading.Title>
                     <Heading.Desc>Manage your images </Heading.Desc>
                 </Heading>
-                <H1>Images by users</H1>
+                <H1>Hình ảnh người dùng</H1>
                 <DataTable 
                     query={{
                         filterBy : 'userId'
@@ -21,7 +21,7 @@ export default function ImagesPage(){
                     route="users"/>
             </div>
             <div>
-                <H1>Images base on products</H1>
+                <H1>Hình ảnh sản phẩm</H1>
                 <DataTable 
                     query={{
                         filterBy : 'productId'
@@ -29,7 +29,7 @@ export default function ImagesPage(){
                     route="products"/>
             </div>
             <div>
-                <H1>Images base on billboard</H1>
+                <H1>Hình ảnh trang chính</H1>
                 <DataTable 
                     query={{
                         filterBy : 'billBoardId'
@@ -37,7 +37,7 @@ export default function ImagesPage(){
                     />
             </div>
             <div>
-                <H1>Images don&apos;t use</H1>
+                <H1>Hình Ảnh don&apos;t use</H1>
                 <DataTable
                      query={{
                         filterBy : ['productId', 'userId','billBoardId']

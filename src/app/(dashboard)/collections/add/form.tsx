@@ -46,7 +46,7 @@ export default function CollectionFrom() {
   React.useEffect(() => {
     if (quill) {
       quill.on('text-change', (delta, oldDelta, source) => {
-        formDispatch({ type: 'CHANGE', field: 'content', value: quill.getText() })
+        formDispatch({ type: 'CHANGE', field: 'content', value: quill.getSemanticHTML() })
       });
       quill.clipboard.dangerouslyPasteHTML(formState.content);
     }
@@ -186,7 +186,7 @@ export default function CollectionFrom() {
           </div>
           <div className='col-span-12 md:col-span-6 lg:col-span-6 space-y-2'>
             <InputLabel htmlFor='description'>Nội Dung</InputLabel>
-            <div style={{ height: 400 }}>
+            <div style={{ height: 300 }}>
               <div ref={quillRef} />
             </div>
           </div>

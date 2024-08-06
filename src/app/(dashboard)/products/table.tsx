@@ -80,7 +80,7 @@ export default function DataTable() {
     },
     {
       field: 'images',
-      headerName: 'Images',
+      headerName: 'Hình Ảnh',
       description: 'This column has a value getter and is not sortable.',
       renderCell: ({row}) => {
      
@@ -128,7 +128,7 @@ export default function DataTable() {
               onClick={copyToClipboard}> Copy </MenuItem>
               <MenuItem 
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-              onClick={handleDelete}>Delete</MenuItem>
+              onClick={handleDelete}>Xóa</MenuItem>
             </Menu>
           </Dropdown>
         );
@@ -143,7 +143,7 @@ export default function DataTable() {
                 className='w-full'
                 id="outlined-required"
                 label="Search"
-                placeholder='Search...'
+                placeholder='Tìm Kiếm...'
             />
         </div>    
         <DataGrid

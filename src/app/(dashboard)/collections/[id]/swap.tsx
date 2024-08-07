@@ -2,10 +2,10 @@
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react"
 import CollectionFrom from "./form"
-import CollectionComment from "./comment"
+import CollectionExhibition from "./exhibition"
 
-const categories = ['Detail','Comments']
-export default function Swap() {
+const categories = ['Thông Tin','Hiện Vật']
+export default function Swap({collectionId}:{collectionId:string}) {
     return (
         <TabGroup>
             <TabList className="flex gap-4 border-b px-4 py-2">
@@ -25,7 +25,7 @@ export default function Swap() {
                     <CollectionFrom />
                 </TabPanel>
                 <TabPanel>
-                    <CollectionComment/>
+                    <CollectionExhibition collectionId={collectionId}/>
                 </TabPanel>
             </TabPanels>
         </TabGroup>

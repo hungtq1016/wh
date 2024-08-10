@@ -41,6 +41,10 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                     }
                 });
                 break;
+            case 'random':
+                    const records = await prisma.product.findMany()
+                    data = records[0] 
+                    break;
             default:
                 return BadRequestResponse(null, "Invalid type");
         }

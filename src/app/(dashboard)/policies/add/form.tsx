@@ -11,6 +11,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { toast } from 'react-toastify';
+import { useQuill } from 'react-quilljs';
 
 const suffixes = [
   {
@@ -54,6 +55,16 @@ export default function PolicyFrom() {
 
   const [formState, formDispatch] = React.useReducer(formReducer, initialState);
   const [loading, setLoading] = React.useState(false);
+  const { quill, quillRef } = useQuill();
+
+  React.useEffect(() => {
+    if (quill) {
+      quill.on('text-change', (delta, oldDelta, source) => {
+        formDispatch({ type: 'CHANGE', field: 'description', value: quill.getSemanticHTML() })
+      });
+      quill.clipboard.dangerouslyPasteHTML(formState.description);
+    }
+  }, [quill]);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -109,25 +120,9 @@ export default function PolicyFrom() {
           </div>
           <div className='col-span-12 space-y-2'>
             <InputLabel htmlFor='content'>Nội Dung Hiển Thị</InputLabel>
-            <Editor
-              apiKey='djw4c7uq7gsbbh61pf3lb9ysv0rtt0rq159cg1mzs8xkarpy'
-              id='content'
-              init={{
-                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                tinycomments_mode: 'embedded',
-                tinycomments_author: 'Author name',
-                mergetags_list: [
-                  { value: 'First.Name', title: 'First Name' },
-                  { value: 'Email', title: 'Email' },
-                ],
-                ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-              }}
-              value={formState.content}
-              onEditorChange={(content, editor) => {
-                formDispatch({ type: 'CHANGE', field: 'content', value: content });
-              }}
-            />
+            <div style={{ height: 300 }}>
+              <div ref={quillRef} />
+            </div>
           </div>
         </div>
         <div className='flex justify-end mt-5 gap-2'>

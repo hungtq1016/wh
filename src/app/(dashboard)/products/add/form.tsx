@@ -97,7 +97,7 @@ export default function ProductFrom() {
   React.useEffect(() => {
     if (descData) {
       descData.on('text-change', (delta, oldDelta, source) => {
-        formDispatch({ type: 'CHANGE', field: 'description', value: descData.getText() })
+        formDispatch({ type: 'CHANGE', field: 'description', value: descData.getSemanticHTML() })
       });
       descData.clipboard.dangerouslyPasteHTML(formState.description);
     }
@@ -106,7 +106,7 @@ export default function ProductFrom() {
   React.useEffect(() => {
     if (aboutData) {
       aboutData.on('text-change', (delta, oldDelta, source) => {
-        formDispatch({ type: 'CHANGE', field: 'about', value: aboutData.getText() })
+        formDispatch({ type: 'CHANGE', field: 'about', value: aboutData.getSemanticHTML() })
       });
       aboutData.clipboard.dangerouslyPasteHTML(formState.about);
     }

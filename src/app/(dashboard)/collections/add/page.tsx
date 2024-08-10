@@ -5,7 +5,7 @@ export default function AddCollectionPage(){
     return (
         <div>
             <Heading>
-                <Heading.Title className="mb-1">Tạo Bộ Sưu Tập</Heading.Title>
+                <Heading.Title className="mb-1">Tạo Triển Lãm</Heading.Title>
                 <Heading.Desc>Tạo mới</Heading.Desc>
             </Heading>
             <CollectionFrom />

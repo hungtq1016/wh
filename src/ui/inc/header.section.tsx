@@ -18,7 +18,7 @@ function classNames(...classes: string[]) {
 const navigation = [
   { name: 'Trang Quản Lý', href: '/' },
   { name: 'Quản lý trang chủ', href: '/home' },
-  { name: 'Bộ sưu tập', href: '/collections' },
+  { name: 'Triển Lãm', href: '/collections' },
   { name: 'Sản Phẩm', href: '/products' },
   { name: 'Hình Ảnh', href: '/images' },
   { name: 'Hóa Đơn', href: '/orders' },

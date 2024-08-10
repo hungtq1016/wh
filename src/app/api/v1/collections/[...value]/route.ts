@@ -21,7 +21,26 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
             case 'chapter':
                 data = await prisma.collection.findUnique({
                     where: {
-                        chapter: Number(value) 
+                        chapter: Number(value)
+                    }
+                });
+                break;
+            case 'relate':
+                data = await prisma.collection.findMany({
+                    where: {
+                        OR: [
+                            { chapter: Number(value) - 2 },
+                            { chapter: Number(value) - 1 },
+                            { chapter: Number(value) + 1 },
+                            { chapter: Number(value) + 2 },
+                        ]
+                    },
+                    select:{
+                        id: true,
+                        title: true,
+                        image: true,
+                        dateTime: true,
+                        chapter: true
                     }
                 });
                 break;

@@ -3,7 +3,7 @@ import ResponseHelper from '@/services/helpers/response.helper';
 import { pushFieldToFields } from '@/services/utils/string.util';
 import { NextRequest } from "next/server";
 
-const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFoundResponse, ConflictResponse, CreatedResponse } = ResponseHelper();
+const { SuccessResponse, InternalServerErrorResponse, FiledsErrorResponse, NotFoundResponse, CreatedResponse } = ResponseHelper();
 
 export async function GET(req: NextRequest) {
     const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '10');

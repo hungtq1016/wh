@@ -18,6 +18,13 @@ export async function GET(req: NextRequest, { params }: { params: { value: strin
                     }
                 });
                 break;
+            case 'collectionId':
+                data = await prisma.collectionExhibition.findMany({
+                        where: {
+                            collectionId: value
+                        }
+                    });
+                    break;
             default:
                 return BadRequestResponse(null, "Invalid type");
         }

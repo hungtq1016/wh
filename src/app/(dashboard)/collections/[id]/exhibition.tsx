@@ -46,7 +46,8 @@ export default function CollectionExhibition({collectionId}:{collectionId:string
   }, [quill]);
 
   React.useEffect(() => {
-    getData("/api/v1/exhibition").then((data) => {
+    getData("/api/v1/exhibition/collectionId/"+collectionId).then((data) => {
+      console.log(data)
       setRows(data);
     });
   }, []);
@@ -133,16 +134,13 @@ export default function CollectionExhibition({collectionId}:{collectionId:string
       headerName: 'Hình Ảnh',
       sortable: false,
       renderCell: ({ row }: { row: any }) => {
-        return row.images.map((image: any, index: number) => (
-          <Image
-            key={index}
-            width={80}
-            height={80}
-            src={image.url}
-            alt={image.alt}
-            className='w-full h-40 object-cover rounded'
-          />
-        ));
+        return (<><Image
+          width={80}
+          height={80}
+          src={row.image}
+          alt={row.title}
+          className='w-full h-40 object-cover rounded'
+        /></>)
       }
     },
     {
